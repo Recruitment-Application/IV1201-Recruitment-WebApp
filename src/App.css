@@ -1,3 +1,57 @@
 .App {
   text-align: center;
 }
+
+body {
+	background-color: #EDF1F5 !important;
+}
+
+.roundedBoxBorder{
+	border-radius: 34px !important;
+}
+
+.textAlignJustify {
+  text-align:justify;
+}
+
+.color-test{
+  background-color: #2b50a8;
+}
+
+.color-text-blue{
+  color: #2b50a8;
+}
+
+.color-text-red{
+  color: #ae2128;
+}
+
+.mt-fix{
+  margin-top: 100px;
+}
+
+.sort-button{
+  float: right;
+  background-color: #2b50a8;
+  color: White;
+  cursor: pointer;
+}
+
+thead button{
+  float: right;
+  background-color: #2b50a8;
+  color: White;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+thead button.ascending::after {
+  content: "\25B2";
+  display: inline-block;
+}
+
+thead button.descending::after {
+  content: "\25BC";
+  display: inline-block;
+}

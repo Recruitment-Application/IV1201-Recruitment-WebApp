@@ -1,6 +1,11 @@
 import React from "react";
 
-function ShowView({ hash, children }) {
+/**
+ * Listen to the hash if changed and Choose which page will show according to the hash and children
+ * @param {*} param0 hash tag from the url to decide which page to show
+ * @returns the new hash tag chosen by user. 
+ */
+function ViewManager({ hash, children }) {
   const [, setRoute] = React.useState(window.location.hash);
   React.useEffect(function () {
     function hashChangeListener() {
@@ -14,4 +19,4 @@ function ShowView({ hash, children }) {
   return hash === window.location.hash ? children : false;
 }
 
-export default ShowView;
+export default ViewManager;
