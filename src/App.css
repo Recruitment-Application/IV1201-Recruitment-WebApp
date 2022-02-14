@@ -10,6 +10,10 @@ body {
 	border-radius: 34px !important;
 }
 
+.borderlessTD{
+  border-top: 0px !important;
+}
+
 .textAlignJustify {
   text-align:justify;
 }
