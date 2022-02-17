@@ -7,7 +7,7 @@ import NavigationSignoutView from '../views/navigationSignoutView'
  * @param {*} param0 userModel which contains the necessary data
  * @returns return the clicked homePage or userprofile reference 
  */
-function NavigationSignout({ userModel, goToHomePageHref, goToUserProfileHref, }) {
+function NavigationSignout({ userModel, goToHomePageHref, goToUserProfileHref }) {
 
     const username = "test";//will be imported from the db/useModelProp
 

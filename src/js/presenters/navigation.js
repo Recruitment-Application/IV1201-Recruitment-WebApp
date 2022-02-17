@@ -27,7 +27,7 @@ function Navigation({ userModel, children }) {
   // } // Show an error message when an error occurs 
   
   
-  let loggedIn = false;
+  let loggedIn = true;
   /**
    * if the applicant or recruiter is signed in, 
    * The function will render the signout child component when a user is logged in
