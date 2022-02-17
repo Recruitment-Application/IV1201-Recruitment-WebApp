@@ -3,9 +3,9 @@ import React from "react";
 //import AnimeData from "../animeData";
 // import usePromise from "../usePromise";
 // import promiseNoData from "../views/promiseNoData";
-import ApplicantApplicationSubmissionView from "../views/applicantApplicationSubmissionView";
+import ApplicationSubmissionView from "../views/applicationSubmissionView";
 
-function ApplicantApplicationSubmission({ userModel, animeModel, navToHome }) {
+function ApplicationSubmission({ userModel, animeModel, navToHome }) {
 
   // const [promise, setPromise] = React.useState(null);
   // const [data, error] = usePromise(promise);
@@ -18,6 +18,11 @@ function ApplicantApplicationSubmission({ userModel, animeModel, navToHome }) {
   const signedIn = true;
   const [SubmitApplication, setaddApplicationToList] = React.useState("Signin to submit the application");
 
+  const competenceTypesList = ["(1) ticket sales", "(2) lotteries", "(3) roller coaster operation"];
+  const experienceYearsList = ["0", "1", "2", "3", "5", "10"];
+  const job ="Amusemenet Park";
+  const data = [];
+  const applicationAlreadySubmited = false;
   // React.useEffect(
   //   function () {
   //     if (currentAnime) {
@@ -38,15 +43,17 @@ function ApplicantApplicationSubmission({ userModel, animeModel, navToHome }) {
 
   return (
     //promiseNoData(promise, data, error) ||
-    React.createElement(ApplicantApplicationSubmissionView, {
+    React.createElement(ApplicationSubmissionView, {
+      job: job,
       competenceType: competenceType => setCompetenceType(competenceType),
+      experienceYearsList: experienceYearsList,
       yearOfExperience: yearOfExperience => setYearsOfExperience(yearOfExperience),
-      competenceApplication: "data",
-      
-      competenceSubmited: "true",
+      competenceApplication: data,
+
+      competenceSubmited: applicationAlreadySubmited,
       // (submitedApplication) => {
       //   if (SignedIn) {
-      //     applicationModel.addSubmitedToUserProfile({
+      //     applicationModel .addSubmitedToUserProfile({
       //       competence: submitedApplication.comptenceType,
       //       yearsOfExprience: submitedApplication.yearsOfExprience,
       //       fromDate: submitedApplication.fromDate,
@@ -55,20 +62,18 @@ function ApplicantApplicationSubmission({ userModel, animeModel, navToHome }) {
       //     applicantModel.updateSubmissionListDB();
       //   }
       //}, 
-      
-      isCompetenceAlreadySubmited: false,
+
+      isCompetenceAlreadySubmited: applicationAlreadySubmited,
       // //applicationsList.find((listApplications) => listApplication.id === currentCompetence) !== undefined, 
       fromDate: fromDate,
-      setFromDate: startDate => setFromDate(startDate), 
+      setFromDate: startDate => setFromDate(startDate),
       toDate: toDate,
       setToDate: toDate => setToDate(toDate),
-
+      competenceTypesList: competenceTypesList,
       SubmitApplicationText: SubmitApplication,
-      SubmitApplicationNav: navToHome, 
-
-      cancelBackToMainNav: navToHome,
+      SubmitApplicationNav: navToHome,
       signedIn: signedIn
     })
   );
 }
-export default ApplicantApplicationSubmission;
+export default ApplicationSubmission;

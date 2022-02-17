@@ -6,7 +6,7 @@ import React from "react";
 import RecruiterFilterView from "../views/recruiterFilterView";
 import FilteredApplicationsView from "../views/filteredApplicationsView";
 
-function RecruiterMain({ userModel, animeModel, navToHome }) {
+function RecruiterMain({ userModel, animeModel, navToApplicationDetails }) {
 
   // const [promise, setPromise] = React.useState(null);
   // const [data, error] = usePromise(promise);
@@ -15,7 +15,14 @@ function RecruiterMain({ userModel, animeModel, navToHome }) {
   const [competenceType, setCompetenceType] = React.useState("");
   const [name, setName] = React.useState("");
 
+  const competenceTypesList = ["(1) ticket sales", "(2) lotteries", "(3) roller coaster operation"];
   const signedIn = true;
+
+  const applicationsList = [
+    { id: 1, fName: 'Garo', lName: 'Malko' },
+    { id: 2, fName: 'Gleano', lName: 'Malke' },
+    { id: 3, fName: 'Simon', lName: 'Bnyo' }
+];
 
   // React.useEffect(
   //   function () {
@@ -40,6 +47,7 @@ function RecruiterMain({ userModel, animeModel, navToHome }) {
     {},
     React.createElement(RecruiterFilterView, {
       setName: name => setName(name),
+      competenceTypesList: competenceTypesList,
       setCompetenceType: competenceType => setCompetenceType(competenceType),
       fromDate: fromDate,
       setFromDate: startDate => setFromDate(startDate), 
@@ -50,10 +58,10 @@ function RecruiterMain({ userModel, animeModel, navToHome }) {
     }), 
     //promiseNoData(promise, data, error) ||
     React.createElement(FilteredApplicationsView, {
-      firstName: "", 
-      lastName: "", 
-      applicationList: "[...applicationList]", 
-      showApplicationDetails: "(applicationId) => { applicationModel.setCurrentApplication(applicationModel); navToApplicationDetails(); },"
+      applicationsList: applicationsList,
+      // "[...applicationList]", 
+      showApplicationDetails: navToApplicationDetails
+                              //"(applicationId) => { applicationModel.setCurrentApplication(applicationModel); navToApplicationDetails(); },"
     })
   );
 }
