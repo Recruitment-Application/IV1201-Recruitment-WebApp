@@ -6,8 +6,8 @@ import NavigationView from "../views/navigationView";
 
 function Navigation({ userModel, children }) {
 
-  //const loggedIn = useModelProp(userModel, "loggedIn"); // Observe the loggedIn property using observer pattern and React hooks
-  //const errorData = useModelProp(userModel, "errorData"); // Observe the errorData property using observer pattern and React hooks
+  // const loggedIn = useModelProp(userModel, "loggedIn"); // Observe the loggedIn property using observer pattern and React hooks
+  // const errorData = useModelProp(userModel, "errorData"); // Observe the errorData property using observer pattern and React hooks
 
   const [navigationSigninComponent, navigationSignupComponent, navigationSignoutComponent] = children; // Destructure the children array
 
@@ -27,7 +27,7 @@ function Navigation({ userModel, children }) {
   // } // Show an error message when an error occurs 
   
   
-  let loggedIn = true;
+  let loggedIn = false;
   /**
    * if the applicant or recruiter is signed in, 
    * The function will render the signout child component when a user is logged in
