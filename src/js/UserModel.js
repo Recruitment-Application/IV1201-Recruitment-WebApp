@@ -1,56 +1,67 @@
-import BASE_URL from "./apiConfig";
+
+import ApiData from "./apiData";
 
 class UserModel {
   constructor() {
     this.subscribers = [];
     this.loggedIn = null;
-    this.uid = null;
-    this.email = null;
-    this.dbref = null;
+    this.username = null;
+    this.role = null;
     this.errorData = null;
 
-  }
-  apiCall(urlPath, requestContent) {
-    const fetchData = fetch(BASE_URL + urlPath, requestContent)
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error("HTTP CODE NOT 200");
-      });;
-    console.log(fetchData);
-    return fetchData
+    this.checkSignin();
 
   }
+
 
   // Performs login to existing account and fills the userModel with the user data.
   signinUser(username, password) {
 
-    return this.apiCall(
-      'user/signin',
-      {
-        'method': 'POST',
-        'body': {
-          'Content-Type': 'application/json',
-          'text': '{\n\t\'username\': ' + username + ' ,\n\t\'password\': ' + password + '\n}'
-        }
-      })
-      .then((response) => {
-        return response;
-      });
+    ApiData.signinUser(username, password).then((result) => {
+      if (result.ok) {
+        result.json().then((data) => {
+          let userLoggedIn = true;
+          let currentUsername = data.success.username;
+          let currentRole = data.success.roleID;
+          this.populateUserModelData({loggedIn: userLoggedIn, username: currentUsername, role: currentRole});
+        });
+      }
+    });
+
+
+
 
   }
 
-  homePageHandler() {
-    return this.apiCall(
-      '',
-      {
-        "method": "GET"
-      })
-      .then((response) => {
-        return response;
-      });
+  checkSignin() {
+    ApiData.checkSignin().then((result) => {
+      if (result.ok) {
+        result.json().then((data) => {
+          let userLoggedIn = true;
+          let currentUsername = data.success.username;
+          let currentRole = data.success.roleID;
+          this.populateUserModelData({loggedIn: userLoggedIn, username: currentUsername, role: currentRole});
+        });
+      }
+      else {
+        this.emptyUserModelData();
+        this.loggedIn = false;
+      }
+    });
+
   }
+
+  signoutUser(){
+    ApiData.signoutUser().then((result) => {
+      if (result.ok) {
+        result.json().then((data) => {
+          this.emptyUserModelData();
+          this.loggedIn = false;
+        });
+      }
+    });
+  }
+
 
   // Reports an error and notify the observers.
   reportError(code, message) {
@@ -58,6 +69,20 @@ class UserModel {
     this.notifyObservers();
   }
 
+  populateUserModelData({ loggedIn, username, role }) {
+    this.loggedIn = loggedIn;
+    this.username = username;
+    this.role = role;
+    this.notifyObservers();
+  }
+
+  emptyUserModelData() {
+    this.loggedIn = null;
+    this.username = null;
+    this.role = null;
+    this.errorData = null;
+    this.notifyObservers();
+  }
 
   emptyErrorData() {
     this.errorData = null;
@@ -74,8 +99,17 @@ class UserModel {
     this.subscribers = this.subscribers.filter(o => { return o !== obs; });
   }
 
+  printModel() {
+    console.log(`loggedIn: ${this.loggedIn}`);
+    console.log(`username: ${this.username}`);
+    console.log(`role: ${this.role}`);
+
+  }
+
+
   // Notifies the obvservers after any changes.
   notifyObservers() {
+    // this.printModel();
     this.subscribers.forEach(callback => {
       try {
         callback();

@@ -20,19 +20,9 @@ function ApplicationSubmission({ userModel, animeModel, navToHome }) {
 
   const competenceTypesList = ["(1) ticket sales", "(2) lotteries", "(3) roller coaster operation"];
   const experienceYearsList = ["0", "1", "2", "3", "5", "10"];
-  const job ="Amusemenet Park";
-  //const data = [];
+  const tempJob ="Amusemenet Park";
   const applicationAlreadySubmited = false;
 
-  React.useEffect(
-    function () {
-      //if (currentUser) {
-        setPromise(userModel.signinUser("TestRecruiter", "TestRecruiter"));
-        //setPromise(userModel.homePageHandler());
-      //}
-    },
-    []
-  );
 
   React.useEffect(
     function () {
@@ -47,7 +37,7 @@ function ApplicationSubmission({ userModel, animeModel, navToHome }) {
   return (
     promiseNoData(promise, data, error) ||
     React.createElement(ApplicationSubmissionView, {
-     job: data,
+     job: tempJob,
       competenceType: competenceType => setCompetenceType(competenceType),
       experienceYearsList: experienceYearsList,
       yearOfExperience: yearOfExperience => setYearsOfExperience(yearOfExperience),

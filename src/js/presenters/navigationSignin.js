@@ -17,7 +17,7 @@ function NavigationSignin({ userModel }) {
     return React.createElement(NavigationSigninView, {
         setUsername: (username) => setUsername(username),
         setPassword: (password) => setPassword(password),
-        handleSignin: () => userModel.loginUser(username, password),
+        handleSignin: () => userModel.signinUser(username, password),
         show: showSignin,
         handleShow: () => setShowSignin(true),
         handleClose: () => setShowSignin(false)
