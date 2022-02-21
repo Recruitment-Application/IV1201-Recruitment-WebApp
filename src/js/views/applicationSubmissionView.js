@@ -3,6 +3,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 const ApplicationSubmissionView = ({ job, competenceType, experienceYearsList, yearOfExperience, fromDate, setFromDate, toDate, setToDate, competenceTypesList, competenceApplication, competenceSubmited, isCompetenceAlreadySubmited, SubmitApplicationText, SubmitApplicationNav, signedIn }) => (
+  
   <div>
     <Container>
     <CardDeck className="p-2 d-flex flex-wrap justify-content-center m-3" >

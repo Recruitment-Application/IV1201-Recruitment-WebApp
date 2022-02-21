@@ -1,5 +1,5 @@
 import React from "react";
-//import useModelProp from "../useModelProp";
+import useModelProp from "../useModelProp";
 import NavigationSignoutView from '../views/navigationSignoutView'
 
 /**
@@ -9,11 +9,11 @@ import NavigationSignoutView from '../views/navigationSignoutView'
  */
 function NavigationSignout({ userModel, goToHomePageHref, goToUserProfileHref }) {
 
-    const username = "test";//will be imported from the db/useModelProp
+    const modelUsername = useModelProp(userModel, "username");
 
     return React.createElement(NavigationSignoutView, {
-        username: username,
-        handleSignout: () => "userModel.logoutUser()",
+        username: modelUsername,
+        handleSignout: () => userModel.signoutUser(),
         navHomePageHref: goToHomePageHref,
         navUserProfileHref: goToUserProfileHref
     });

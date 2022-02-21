@@ -21,13 +21,14 @@ const goToApplicantPage = () => window.location.hash = "applicantView";
 const goToRecruiter = () => window.location.hash = "recruiterMain";
 const goToApplicationDetails = () => window.location.hash = "applicationDetails";
 
-function App() {
+
+function App({userModel}) {
   return (
     <div className="App">
-      <Navigation userModel={null}>
-        <NavigationSignin userModel={null}/>
-        <NavigationSignup userModel={null}/>
-        <NavigationSignout userModel={null} goToHomePageHref={goToHomePageHref} goToUserProfileHref={tempApplicantPageHref} />
+      <Navigation userModel={userModel}>
+        <NavigationSignin userModel={userModel}/>
+        <NavigationSignup userModel={userModel}/>
+        <NavigationSignout userModel={userModel} goToHomePageHref={goToHomePageHref} goToUserProfileHref={tempApplicantPageHref} />
       </Navigation>
       <ShowView hash="#home">
         <div>
@@ -37,19 +38,19 @@ function App() {
 
       <ShowView hash="#applicantView">
         <div>
-          <ApplicationSubmission userModel={null} animeModel={null} navToHome={goToRecruiter} />
+          <ApplicationSubmission userModel={userModel} animeModel={null} navToHome={goToRecruiter} />
         </div>
       </ShowView>
       
       <ShowView hash="#recruiterMain">
         <div>
-          <RecruiterMain userModel={null} animeModel={null} navToApplicationDetails={goToApplicationDetails} />
+          <RecruiterMain userModel={userModel} animeModel={null} navToApplicationDetails={goToApplicationDetails} />
         </div>
       </ShowView>
 
       <ShowView hash="#applicationDetails">
         <div>
-          <ChosenApplicationDetails userModel={null} animeModel={null} navToApplicationsList={goToHomePageHref} />
+          <ChosenApplicationDetails userModel={userModel} animeModel={null} navToApplicationsList={goToHomePageHref} />
         </div>
       </ShowView>
     </div>

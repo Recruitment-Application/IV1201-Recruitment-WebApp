@@ -7,7 +7,7 @@ const NavigationView = ({component, toggleState, setToggleState, handleClose}) =
       <Col>
         <img width="50" height="40" src="android-chrome-192x192.png" alt="website logo"/>{" "}
       </Col>
-      <Col classname="pl-0">
+      <Col className="pl-0">
         <p className="font-weight-bold pl-0">RecruitementApp</p>
       </Col>
     </Row>

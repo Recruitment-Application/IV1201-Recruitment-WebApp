@@ -13,10 +13,11 @@ function NavigationSignin({ userModel }) {
     const [showSignin, setShowSignin] = React.useState(false); // The Signin modal gets rendered depending on this value
 
 
+
     return React.createElement(NavigationSigninView, {
         setUsername: (username) => setUsername(username),
         setPassword: (password) => setPassword(password),
-        handleSignin: () => "userModel.loginUser(username, password)",
+        handleSignin: () => userModel.signinUser(username, password),
         show: showSignin,
         handleShow: () => setShowSignin(true),
         handleClose: () => setShowSignin(false)
