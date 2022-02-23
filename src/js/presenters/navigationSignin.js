@@ -13,7 +13,10 @@ function NavigationSignin({ userModel }) {
     const [showSignin, setShowSignin] = React.useState(false); // The Signin modal gets rendered depending on this value
 
 
-
+    /**
+     * render the NavigationSigninView where the username and password are send by the user. 
+     * Calling signinUser function in the userModel to process the signin with the entered credentials.
+     */
     return React.createElement(NavigationSigninView, {
         setUsername: (username) => setUsername(username),
         setPassword: (password) => setPassword(password),

@@ -22,6 +22,11 @@ const goToRecruiter = () => window.location.hash = "recruiterMain";
 const goToApplicationDetails = () => window.location.hash = "applicationDetails";
 
 
+/**
+ * 
+ * @param {*} param0 
+ * @returns div of the specified views according to the entered hash. 
+ */
 function App({userModel}) {
   return (
     <div className="App">
@@ -38,19 +43,19 @@ function App({userModel}) {
 
       <ShowView hash="#applicantView">
         <div>
-          <ApplicationSubmission userModel={userModel} animeModel={null} navToHome={goToRecruiter} />
+          <ApplicationSubmission userModel={userModel} applicationModel={null} navToHome={goToRecruiter} />
         </div>
       </ShowView>
       
       <ShowView hash="#recruiterMain">
         <div>
-          <RecruiterMain userModel={userModel} animeModel={null} navToApplicationDetails={goToApplicationDetails} />
+          <RecruiterMain userModel={userModel} applicationModel={null} navToApplicationDetails={goToApplicationDetails} />
         </div>
       </ShowView>
 
       <ShowView hash="#applicationDetails">
         <div>
-          <ChosenApplicationDetails userModel={userModel} animeModel={null} navToApplicationsList={goToHomePageHref} />
+          <ChosenApplicationDetails userModel={userModel} applicationModel={null} navToApplicationsList={goToHomePageHref} />
         </div>
       </ShowView>
     </div>
@@ -58,6 +63,10 @@ function App({userModel}) {
 }
 
 
+/**
+ * when the route isn't one of the hashes listed in the if statement, or if the hash changed to uneligiable hash, 
+ * the defaultRoute() will change it back to #home
+ */
 function defaultRoute() {
   if (!["#home", "#userProfile", "#applicantView", "#recruiterMain", "#applicationDetails",].find(knownRoute =>
     knownRoute === window.location.hash))
