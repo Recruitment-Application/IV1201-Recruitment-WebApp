@@ -1,12 +1,12 @@
 import React from "react";
 //import useModelProp from "../useModelProp";
-//import AnimeData from "../animeData";
+//import ApplicationData from "../applicationData";
 // import usePromise from "../usePromise";
 // import promiseNoData from "../views/promiseNoData";
 import RecruiterFilterView from "../views/recruiterFilterView";
 import FilteredApplicationsView from "../views/filteredApplicationsView";
 
-function RecruiterMain({ userModel, animeModel, navToApplicationDetails }) {
+function RecruiterMain({ userModel, applicationModel, navToApplicationDetails }) {
 
   // const [promise, setPromise] = React.useState(null);
   // const [data, error] = usePromise(promise);
@@ -42,6 +42,11 @@ function RecruiterMain({ userModel, animeModel, navToApplicationDetails }) {
   //   [signedIn]
   // );
 
+
+  /**
+   * The first render for the RecruiterFilterView which allows the recruiter filter the application according to the entered attributes. 
+   * The second render is for FilteredApplicationsView which display the filtered applications.
+   */
   return React.createElement(
     React.Fragment,
     {},

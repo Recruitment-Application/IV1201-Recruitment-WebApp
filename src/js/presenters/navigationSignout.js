@@ -11,6 +11,9 @@ function NavigationSignout({ userModel, goToHomePageHref, goToUserProfileHref })
 
     const modelUsername = useModelProp(userModel, "username");
 
+    /**
+     * render the NavigationSignoutView and call the function signoutUser in the userModel to process the signout.
+     */
     return React.createElement(NavigationSignoutView, {
         username: modelUsername,
         handleSignout: () => userModel.signoutUser(),

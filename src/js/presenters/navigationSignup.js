@@ -17,6 +17,9 @@ function NavigationSignup({ userModel }) { // userModel will be passed as param 
     const [password, setPassword] = React.useState(""); // Holds the inputed password
     const [showSignup, setShowSignup] = React.useState(false); // The Signup modal gets rendered depending on this value
 
+    /**
+     * render the NavigationSignupView and pass the entered data by the user to the signupUser(). 
+     */
     return React.createElement(NavigationSignupView, {
         setFirstName: (firstName) => setFirstName(firstName),
         setLastName: (lastName) => setLastName(lastName),
@@ -24,11 +27,11 @@ function NavigationSignup({ userModel }) { // userModel will be passed as param 
         setEmail: (email) => setEmail(email),
         setUsername: (username) => setUsername(username),
         setPassword: (password) => setPassword(password),
-        handleSignup: () => "userModel.signupUser(firstName, lastName, personNumber, email, username, password)", // will be uncommented when the usermodel is finished.
+        handleSignup: () => userModel.signupUser(firstName, lastName, personNumber, email, username, password) , // will be uncommented when the usermodel is finished.
         show: showSignup,
         handleShow: () => setShowSignup(true),
         handleClose: () => setShowSignup(false)
-    }); //Render the SignupView
+    });
 }
 
 export default NavigationSignup;

@@ -4,7 +4,7 @@ import usePromise from "../usePromise";
 import promiseNoData from "../views/promiseNoData";
 import ApplicationSubmissionView from "../views/applicationSubmissionView";
 
-function ApplicationSubmission({ userModel, animeModel, navToHome }) {
+function ApplicationSubmission({ userModel, applicationModel, navToHome }) {
 
   //const currentUser = useModelProp(userModel, "currentUser");
   const [fromDate, setFromDate] = React.useState("");
@@ -23,7 +23,9 @@ function ApplicationSubmission({ userModel, animeModel, navToHome }) {
   const tempJob ="Amusemenet Park";
   const applicationAlreadySubmited = false;
 
-
+  /**
+   * check if the user is signedin, Set the submit button name to "Submit the application".
+   */
   React.useEffect(
     function () {
       if (signedIn) {
@@ -34,6 +36,9 @@ function ApplicationSubmission({ userModel, animeModel, navToHome }) {
   );
   
 
+  /**
+   * render the applicationSubmissionView with the sent data, and return the action of submitting the application.
+   */
   return (
     promiseNoData(promise, data, error) ||
     React.createElement(ApplicationSubmissionView, {

@@ -1,11 +1,10 @@
 import React from "react";
 //import useModelProp from "../useModelProp";
-//import AnimeData from "../animeData";
 // import usePromise from "../usePromise";
 // import promiseNoData from "../views/promiseNoData";
 import ChosenApplicationDetailsView from "../views/chosenApplicationDetailsView";
 
-function ChosenApplicationDetails({ userModel, animeModel, navToApplicationsList }) {
+function ChosenApplicationDetails({ userModel, applicationModel, navToApplicationsList }) {
 
   // const [promise, setPromise] = React.useState(null);
   // const [data, error] = usePromise(promise);
@@ -26,11 +25,11 @@ function ChosenApplicationDetails({ userModel, animeModel, navToApplicationsList
 
   // React.useEffect(
   //   function () {
-  //     if (currentAnime) {
-  //       setPromise(AnimeData.searchAnimeById(currentAnime));
+  //     if (currentApplication) {
+  //       setPromise(ApplicationData.searchApplicationById(currentApplication));
   //     }
   //   },
-  //   [currentAnime]
+  //   [currentApplication]
   // );
 
   // React.useEffect(
@@ -42,6 +41,9 @@ function ChosenApplicationDetails({ userModel, animeModel, navToApplicationsList
   //   [signedIn]
   // );
 
+  /**
+   * send the required data to render the ChosenApplicationDetailsView and return an action for the made decision by the recruiter.
+   */
   return (
     //promiseNoData(promise, data, error) ||
     React.createElement(ChosenApplicationDetailsView, {
