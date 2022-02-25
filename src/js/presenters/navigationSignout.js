@@ -10,7 +10,9 @@ import NavigationSignoutView from '../views/navigationSignoutView'
 function NavigationSignout({ userModel, goToHomePageHref, goToUserProfileHref }) {
 
     const modelUsername = useModelProp(userModel, "username");
-
+    //const modelRoleId = useModelProp(userModel, "role");
+    // console.log(userModel);
+    // console.log(modelRoleId)
     /**
      * render the NavigationSignoutView and call the function signoutUser in the userModel to process the signout.
      */

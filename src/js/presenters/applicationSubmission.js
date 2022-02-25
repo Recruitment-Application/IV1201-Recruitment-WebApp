@@ -14,7 +14,7 @@ function ApplicationSubmission({ userModel, applicationModel, navToHome }) {
   const [promise, setPromise] = React.useState(null);
   const [data, error] = usePromise(promise);
 
-  //const competenceApplication = "";
+  
   const signedIn = true;
   const [SubmitApplication, setaddApplicationToList] = React.useState("Signin to submit the application");
 

@@ -117,7 +117,39 @@ const ApiData = {
             .then((response) => {
                 return response;
             });
-    }
+    }, 
+
+    getJobs() {
+        //http://127.0.0.1:3030/job/getJobs
+        return this.apiCall(
+            'job/getJobs'
+            , {
+                method: 'get',
+                credentials: 'include',
+            }
+        ).then((response) => {
+            return response;
+        });
+    },
+
+    // filterApplications(username, password) {
+
+    //     return this.apiCall(
+    //         'user/signin'
+    //         , {
+    //             method: 'post',
+    //             credentials: 'include',
+    //             headers: {
+    //                 'Accept': 'application/json, text/plain, */*',
+    //                 'Content-Type': 'application/json'
+    //             },
+    //             body: JSON.stringify({ "username": username, "password": password }),
+
+    //         }
+    //     ).then((response) => {
+    //         return response;
+    //     });
+    // },
 
 };
 
