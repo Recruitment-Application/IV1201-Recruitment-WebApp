@@ -9,7 +9,7 @@ import RecruiterApplicantPresenter from "./js/presenters/recruiterApplicantPrese
 import NavigationSignup from "./js/presenters/navigationSignup";
 import NavigationSignin from "./js/presenters/navigationSignin";
 import NavigationSignout from "./js/presenters/navigationSignout";
-//import useModelProp from "../useModelProp";
+// import useModelProp from "../useModelProp";
 
 import './App.css';
 

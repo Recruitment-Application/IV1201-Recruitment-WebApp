@@ -1,32 +1,21 @@
 import React from "react";
 import useModelProp from "../useModelProp";
-import ApiData from "../apiData";
-import usePromise from "../usePromise";
-import promiseNoData from "../views/promiseNoData";
 import RecruiterFilterView from "../views/recruiterFilterView";
 import FilteredApplicationsView from "../views/filteredApplicationsView";
 
 function RecruiterMain({ userModel, applicationModel, navToApplicationDetails }) {
-
-  const [promise, setPromise] = React.useState(null);
-  const [data, error] = usePromise(promise);
   const [fromDate, setFromDate] = React.useState("");
   const [toDate, setToDate] = React.useState("");
   const [name, setName] = React.useState("");
   const [chosenCompetence, setChosenCompetence] = React.useState("");
-  const [applicationsList, setApplicationsList] = React.useState("");
-  let pageNum = 1;
+
 
   let competenceType = useModelProp(applicationModel, "competenceList");
-
-  const modelRoleId = useModelProp(userModel, "role");
-  const filledDataOnceInList = useModelProp(applicationModel, "filledDataOnce");
-
-  React.useEffect(() => {
-    setPromise();
-  }, []);
-
-
+  let modelRoleId = useModelProp(userModel, "role");
+  let filledDataOnceInList = useModelProp(applicationModel, "filledDataOnce");
+  let modelApplicationsList = useModelProp(applicationModel, "applicationsList");
+  let pageNum = 0;
+  
   React.useEffect(
     function () {
       if (modelRoleId == 1 && filledDataOnceInList == false) {
@@ -80,15 +69,12 @@ function RecruiterMain({ userModel, applicationModel, navToApplicationDetails })
       handleAppliedFilter: () => {
         //setPromise(applicationModel.getApplicationsList());
         applicationModel.filterDateInApplicationAndForwardToApiData(name, chosenCompetence, fromDate, toDate, pageNum);
-
-        setPromise(applicationModel.getApplicationResponse());
       }, // will be replaced with the handler for the filter.
       signedIn: signedIn
     }),
-
-    promiseNoData(promise, data, error) ||
+    modelApplicationsList &&
     React.createElement(FilteredApplicationsView, {
-      applicationsList: data,
+      applicationsList: modelApplicationsList,
       showApplicationDetails: (applicationID) => {
         applicationModel.setCurrentApplicationID(applicationID);
         navToApplicationDetails();

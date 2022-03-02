@@ -21,7 +21,6 @@ class ApplicationModel {
         this.errorData = null;
         this.filledDataOnce = false;
         this.currentApplicationID = null;
-        this.applicationPromise = null;
         this.getJobs();
     }
 
@@ -52,9 +51,7 @@ class ApplicationModel {
                 if (result.ok) {
                     result.json().then((data) => {
                         let dataContent = data.success;
-                        //let applicationsFromData = dataContent.applications;
-                        this.applicationPromise = data;
-                        this.populateApplicationsData({dataContent});
+                        this.populateApplicationsData({ dataContent });
                         this.notifyObservers();
                     });
                 }
@@ -63,21 +60,17 @@ class ApplicationModel {
     }
 
     filterDateInApplicationAndForwardToApiData(unfilteredName, unfilteredCompetenceId, unfilterdDateFrom, unfilterdDateTo, unfilteredPageNum) {
-
         let dateFrom = "";
         let dateTo = "";
         let name = "";
         let competenceId = 0;
         if (unfilterdDateFrom !== "" && unfilterdDateFrom !== undefined) {
-            dateFrom = unfilterdDateFrom.toISOString().split('T')[0];
-            console.log(unfilterdDateFrom.toString());
-            console.log(unfilterdDateFrom);
-            console.log(dateFrom);
+            const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+            dateFrom = unfilterdDateFrom.toLocaleDateString('sv-SE', options);
         }
         if (unfilterdDateTo !== "" && unfilterdDateTo !== undefined) {
-            dateTo = unfilterdDateTo.toISOString().split('T')[0];
-            console.log(unfilterdDateTo);
-            console.log(dateTo);
+            const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+            dateTo = unfilterdDateTo.toLocaleDateString('sv-SE', options);
         }
         if (unfilteredName !== "") {
             name = unfilteredName;
@@ -88,7 +81,7 @@ class ApplicationModel {
         //unfilteredPageNum should be handled (can be 0, 1, 2, etc.) from user/default
 
 
-      this.filterApplicationsByRecruiter(name, competenceId, dateFrom, dateTo, unfilteredPageNum);
+        this.filterApplicationsByRecruiter(name, competenceId, dateFrom, dateTo, unfilteredPageNum);
 
 
 
@@ -105,29 +98,32 @@ class ApplicationModel {
      * @param {*} param0 
      */
     populateJobData({ dataContent }) {
+        if (!this.filledDataOnce) {
 
-        for (let i = 0; i < dataContent.length; i++) {
 
-            //let competenceNum = data.success[i].competences.length;
+            for (let i = 0; i < dataContent.length; i++) {
 
-            for (let j = 0; j < dataContent[i].competences.length; j++) {
-                let competence = {
-                    competenceId: dataContent[i].competences[j].id,
-                    competenceType: dataContent[i].competences[j].type,
+                //let competenceNum = data.success[i].competences.length;
+
+                for (let j = 0; j < dataContent[i].competences.length; j++) {
+                    let competence = {
+                        competenceId: dataContent[i].competences[j].id,
+                        competenceType: dataContent[i].competences[j].type,
+                    }
+                    this.competenceList = [competence, ...this.competenceList];
                 }
-                this.competenceList = [competence, ...this.competenceList];
+                console.log(this.competenceList);
+
+                this.job = {
+                    jobID: dataContent[i].jobID,
+                    description: dataContent[i].description,
+                    competenceList: this.competenceList
+                }
+
+                this.jobList = [this.job, ...this.jobList];
             }
-
-
-            this.job = {
-                jobID: dataContent[i].jobID,
-                description: dataContent[i].description,
-                competenceList: this.competenceList
-            }
-
-            this.jobList = [this.job, ...this.jobList];
+            this.filledDataOnce = true;
         }
-        this.filledDataOnce = true;
         this.notifyObservers();
     }
 
@@ -141,10 +137,6 @@ class ApplicationModel {
     getApplicationsList() {
         //console.log(this.applicationsList);
         return this.applicationsList;
-    }
-
-    getApplicationResponse() {
-        return this.applicationPromise;
     }
 
 
