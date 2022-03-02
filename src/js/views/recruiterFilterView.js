@@ -34,7 +34,7 @@ const RecruiterFilterView = ({ setName, competenceTypesList, chosenCompetence, f
                   startDate={fromDate}
                   endDate={toDate}
                   minDate={new Date()}
-                  dateFormat={'dd-MM-yyyy'}
+                  dateFormat={'yyyy-MM-dd'}
                 />
               </Form.Group>
 
@@ -50,7 +50,7 @@ const RecruiterFilterView = ({ setName, competenceTypesList, chosenCompetence, f
                   startDate={fromDate}
                   endDate={toDate}
                   minDate={fromDate}
-                  dateFormat={'dd-MM-yyyy'}
+                  dateFormat={'yyyy-MM-dd'}
                 />
               </Form.Group>
             </Col>

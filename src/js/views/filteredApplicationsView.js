@@ -13,7 +13,7 @@ const FilteredApplicationsView = ({ applicationsList, showApplicationDetails }) 
       <tbody>
 
         {
-          applicationsList.success.applications.map(ApplicationDetails =>
+          applicationsList.map(ApplicationDetails =>
             <tr>
               <td>
                 {ApplicationDetails.firstName}
