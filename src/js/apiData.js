@@ -17,7 +17,17 @@ const ApiData = {
 
                 return response;
             });
-        return fetchData
+        return fetchData;
+
+    },
+
+    apiCallQuery(urlPath, requestContent) {
+        const fetchData = fetch(BASE_URL + urlPath, requestContent)
+            .then((response) => {
+
+                return response;
+            });
+        return fetchData;
 
     },
 
@@ -117,7 +127,7 @@ const ApiData = {
             .then((response) => {
                 return response;
             });
-    }, 
+    },
 
     getJobs() {
         //http://127.0.0.1:3030/job/getJobs
@@ -131,6 +141,23 @@ const ApiData = {
             return response;
         });
     },
+
+    listApplications(name, competenceId, dateFrom, dateTo, page) {
+        return this.apiCallQuery(
+            'job/listApplications?' + new URLSearchParams({
+                "name": name, "competenceId": competenceId,
+                "dateFrom": dateFrom, "dateTo": dateTo, "page": page
+            })
+            , {
+                method: 'get',
+                credentials: 'include',
+            }
+        ).then((response) => {
+            return response;
+        });
+    },
+
+
 
     // filterApplications(username, password) {
 

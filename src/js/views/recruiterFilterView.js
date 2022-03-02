@@ -2,7 +2,7 @@ import { Button, Card, Form, InputGroup, Col, Row } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-const RecruiterFilterView = ({ setName, competenceTypesList, setCompetenceType, fromDate, setFromDate, toDate, setToDate, handleAppliedFilter, signedIn }) => (
+const RecruiterFilterView = ({ setName, competenceTypesList, chosenCompetence, fromDate, setFromDate, toDate, setToDate, handleAppliedFilter, signedIn }) => (
   <Card className="p-2 ">
     <Form className="filter d-flex justify-content-center">
       <Row>
@@ -17,9 +17,9 @@ const RecruiterFilterView = ({ setName, competenceTypesList, setCompetenceType, 
             <Col>
               <Form.Group controlId="formBasicCompetence" className=" p-2">
                 <Form.Label>Competence:</Form.Label>
-                <Form.Control size="md" as="select" onChange={(e) => setCompetenceType(e.target.value)}>
-                  {competenceTypesList.map((type, i) => (
-                    <option key={i} value={i} >{type}</option>
+                <Form.Control size="md" as="select" onChange={(e) => chosenCompetence(e.target.value)}>
+                  {Object.keys(competenceTypesList).map((competenceId) => (
+                      <option key={competenceId} value={competenceTypesList[competenceId].competenceId}>{competenceTypesList[competenceId].competenceType}</option>
                   ))}
                 </Form.Control>
               </Form.Group>
@@ -34,6 +34,7 @@ const RecruiterFilterView = ({ setName, competenceTypesList, setCompetenceType, 
                   startDate={fromDate}
                   endDate={toDate}
                   minDate={new Date()}
+                  dateFormat={'dd-MM-yyyy'}
                 />
               </Form.Group>
 
@@ -49,16 +50,15 @@ const RecruiterFilterView = ({ setName, competenceTypesList, setCompetenceType, 
                   startDate={fromDate}
                   endDate={toDate}
                   minDate={fromDate}
+                  dateFormat={'dd-MM-yyyy'}
                 />
               </Form.Group>
             </Col>
 
             <Col>
               <Form.Group className="p-4">
-                <Button className="mr-2 my-1" variant="outline-dark" type="button" size="lg"
-                  // onClick={() => { handleAppliedFilter(); }} disabled={!signedIn}
-                  
-                  >
+                
+                <Button className="mr-2 my-1" variant="outline-dark" type="button" size="lg" onClick={(e) => { handleAppliedFilter(); e.preventDefault(); }}>
                   Filter Applications
                 </Button>
               </Form.Group>

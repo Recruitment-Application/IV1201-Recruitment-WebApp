@@ -1,22 +1,28 @@
 
 import ApiData from "./apiData";
 
-/**
- * the UserModel class calls function in ApiData file that contaisn the apiCalls. 
- */
 class ApplicationModel {
 
-    /**
-     * the constructor of the UserModel that declares the global variables. 
-     * At the end, it calls the checkSignin() to keep the latest eligiable signedin user to the webapp.
-     */
     constructor() {
         this.subscribers = [];
-        this.jobID = null;
-        this.jobDescription = null;
         this.competenceList = [];
-        this.applicationsList = null;
+
+        // this.competence = {
+        //     competenceId: null,
+        //     competenceType: null,
+        // }
+        this.job = {
+            jobID: null,
+            jobDescription: null,
+            competenceList: this.competenceList,
+        };
+        this.jobList = [];
+        this.applicationsList = [];
         this.errorData = null;
+        this.filledDataOnce = false;
+        this.currentApplicationID = null;
+        this.applicationPromise = null;
+        this.getJobs();
     }
 
 
@@ -25,27 +31,68 @@ class ApplicationModel {
         ApiData.getJobs().then((result) => {
             if (result.ok) {
                 result.json().then((data) => {
-                    let jobID = data.success.jobID;
-                    let description = data.success.description;
-                    let competenceObjects = data.success.competences;
-                    
-                    this.populateJobCompetenceData({ jobID: jobID, description: description, competenceList: competenceObjects });
+                    let dataContent = data.success;
+                    this.populateJobData({ dataContent });
                 });
             }
         });
 
     }
 
-    // filterCompetenceObjectsList(competenceObjects) {
-    //     competenceObjects.forEach(callback => {
-    //         try {
-    //             callback();
-    //         }
-    //         catch (err) {
-    //             console.error("Callback error: ", err, callback);
-    //         }
-    //     });
-    // }
+
+    // 
+    getCompetenceList() {
+        return this.competenceList; // will this be called and list the jobs as well, or just the competenceList for one job ?
+    }
+
+    filterApplicationsByRecruiter(name, competenceId, dateFrom, dateTo, pageNum) {
+
+        ApiData.listApplications(name, competenceId, dateFrom, dateTo, pageNum)
+            .then((result) => {
+                if (result.ok) {
+                    result.json().then((data) => {
+                        let dataContent = data.success;
+                        //let applicationsFromData = dataContent.applications;
+                        this.applicationPromise = data;
+                        this.populateApplicationsData({dataContent});
+                        this.notifyObservers();
+                    });
+                }
+            });
+
+    }
+
+    filterDateInApplicationAndForwardToApiData(unfilteredName, unfilteredCompetenceId, unfilterdDateFrom, unfilterdDateTo, unfilteredPageNum) {
+
+        let dateFrom = "";
+        let dateTo = "";
+        let name = "";
+        let competenceId = 0;
+        if (unfilterdDateFrom !== "" && unfilterdDateFrom !== undefined) {
+            dateFrom = unfilterdDateFrom.toISOString().split('T')[0];
+            console.log(unfilterdDateFrom.toString());
+            console.log(unfilterdDateFrom);
+            console.log(dateFrom);
+        }
+        if (unfilterdDateTo !== "" && unfilterdDateTo !== undefined) {
+            dateTo = unfilterdDateTo.toISOString().split('T')[0];
+            console.log(unfilterdDateTo);
+            console.log(dateTo);
+        }
+        if (unfilteredName !== "") {
+            name = unfilteredName;
+        }
+        if (unfilteredCompetenceId !== "") {
+            competenceId = unfilteredCompetenceId;
+        }
+        //unfilteredPageNum should be handled (can be 0, 1, 2, etc.) from user/default
+
+
+      this.filterApplicationsByRecruiter(name, competenceId, dateFrom, dateTo, unfilteredPageNum);
+
+
+
+    }
 
     // Reports an error and notify the observers.
     reportError(code, message) {
@@ -57,11 +104,57 @@ class ApplicationModel {
      * fill the userData with the passed data of loggedIn, username and role.
      * @param {*} param0 
      */
-     populateJobCompetenceData({ jobID, description, competenceList }) {
-        this.jobID = jobID;
-        this.description = description;
-        this.competenceList = competenceList;
+    populateJobData({ dataContent }) {
+
+        for (let i = 0; i < dataContent.length; i++) {
+
+            //let competenceNum = data.success[i].competences.length;
+
+            for (let j = 0; j < dataContent[i].competences.length; j++) {
+                let competence = {
+                    competenceId: dataContent[i].competences[j].id,
+                    competenceType: dataContent[i].competences[j].type,
+                }
+                this.competenceList = [competence, ...this.competenceList];
+            }
+
+
+            this.job = {
+                jobID: dataContent[i].jobID,
+                description: dataContent[i].description,
+                competenceList: this.competenceList
+            }
+
+            this.jobList = [this.job, ...this.jobList];
+        }
+        this.filledDataOnce = true;
         this.notifyObservers();
+    }
+
+    populateApplicationsData(filteredApplications) {
+        let applications = filteredApplications.dataContent.applications;
+        this.applicationsList = applications;
+
+        this.notifyObservers();
+    }
+
+    getApplicationsList() {
+        //console.log(this.applicationsList);
+        return this.applicationsList;
+    }
+
+    getApplicationResponse() {
+        return this.applicationPromise;
+    }
+
+
+    setCurrentApplicationID(applicationID) {
+        this.currentApplicationID = applicationID;
+        this.notifyObservers();
+    }
+
+    getCurrentApplicationID() {
+        return this.currentApplicationID;
     }
 
     /**
@@ -78,10 +171,10 @@ class ApplicationModel {
     /**
      * empties the errorData and set its value to null, and then notify the observers.
      */
-    // emptyErrorData() {
-    //     this.errorData = null;
-    //     this.notifyObservers();
-    // }
+    emptyErrorData() {
+        this.errorData = null;
+        this.notifyObservers();
+    }
 
     // Adds an observer to the userModel.
     addObserver(callback) {

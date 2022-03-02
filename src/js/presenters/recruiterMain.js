@@ -1,48 +1,56 @@
 import React from "react";
 import useModelProp from "../useModelProp";
-//import ApplicationData from "../applicationData";
-// import usePromise from "../usePromise";
-// import promiseNoData from "../views/promiseNoData";
+import ApiData from "../apiData";
+import usePromise from "../usePromise";
+import promiseNoData from "../views/promiseNoData";
 import RecruiterFilterView from "../views/recruiterFilterView";
 import FilteredApplicationsView from "../views/filteredApplicationsView";
 
 function RecruiterMain({ userModel, applicationModel, navToApplicationDetails }) {
 
-  // const [promise, setPromise] = React.useState(null);
-  // const [data, error] = usePromise(promise);
+  const [promise, setPromise] = React.useState(null);
+  const [data, error] = usePromise(promise);
   const [fromDate, setFromDate] = React.useState("");
   const [toDate, setToDate] = React.useState("");
-  const [competenceType, setCompetenceType] = React.useState("");
   const [name, setName] = React.useState("");
+  const [chosenCompetence, setChosenCompetence] = React.useState("");
+  const [applicationsList, setApplicationsList] = React.useState("");
+  let pageNum = 1;
 
-  //const modelRoleId = userModel.
-  //applicationModel
-  // console.log(useModelProp(applicationModel, "jobID"));
-  // applicationModel.getJobs();
-  // console.log(applicationModel);
-  const jobs = applicationModel.getJobs();
-  console.log(useModelProp(applicationModel, "competences"));
-  //console.log(competenceTypesList2);
-  
-  const competenceTypesList = ["(1) ticket sales", "(2) lotteries", "(3) roller coaster operation"];
-  // console.log(competenceTypesList2);
-  // console.log(competenceTypesList);
+  let competenceType = useModelProp(applicationModel, "competenceList");
+
+  const modelRoleId = useModelProp(userModel, "role");
+  const filledDataOnceInList = useModelProp(applicationModel, "filledDataOnce");
+
+  React.useEffect(() => {
+    setPromise();
+  }, []);
+
+
+  React.useEffect(
+    function () {
+      if (modelRoleId == 1 && filledDataOnceInList == false) {
+        applicationModel.getJobs();
+      }
+    },
+    [modelRoleId]
+  );
+
+
   const signedIn = true;
 
-  const applicationsList = [
-    { id: 1, fName: 'Garo', lName: 'Malko' },
-    { id: 2, fName: 'Gleano', lName: 'Malke' },
-    { id: 3, fName: 'Simon', lName: 'Bnyo' }
-];
+  //const applicationsList = useModelProp(applicationModel, "applications");
 
   // React.useEffect(
   //   function () {
-  //     if (currentApplication) {
-  //       setPromise(ApplicationDataList.searchApplicationeById(currentApplication));
+  //     if (applicationsList === []) {
+  //       setPromise(setApplicationsList(applicationModel.getApplicationsList()));
   //     }
   //   },
-  //   [currentApplication]
+  //   [applicationsList]
   // );
+
+
 
   // React.useEffect(
   //   function () {
@@ -63,22 +71,29 @@ function RecruiterMain({ userModel, applicationModel, navToApplicationDetails })
     {},
     React.createElement(RecruiterFilterView, {
       setName: name => setName(name),
-      competenceTypesList: competenceTypesList,
-      setCompetenceType: competenceType => setCompetenceType(competenceType),
+      competenceTypesList: competenceType,
+      chosenCompetence: chosenCompetence => setChosenCompetence(chosenCompetence),
       fromDate: fromDate,
-      setFromDate: startDate => setFromDate(startDate), 
+      setFromDate: startDate => setFromDate(startDate),
       toDate: toDate,
       setToDate: toDate => setToDate(toDate),
-      handleAppliedFilter: () => {}, // will be replaced with the handler for the filter.
+      handleAppliedFilter: () => {
+        //setPromise(applicationModel.getApplicationsList());
+        applicationModel.filterDateInApplicationAndForwardToApiData(name, chosenCompetence, fromDate, toDate, pageNum);
+
+        setPromise(applicationModel.getApplicationResponse());
+      }, // will be replaced with the handler for the filter.
       signedIn: signedIn
-    }), 
-    //promiseNoData(promise, data, error) ||
+    }),
+
+    promiseNoData(promise, data, error) ||
     React.createElement(FilteredApplicationsView, {
-      applicationsList: applicationsList,
-      // "[...applicationList]", 
-      showApplicationDetails: navToApplicationDetails
-                              //"(applicationId) => { applicationModel.setCurrentApplication(applicationModel); navToApplicationDetails(); },"
-    })
+      applicationsList: data,
+      showApplicationDetails: (applicationID) => {
+        applicationModel.setCurrentApplicationID(applicationID);
+        navToApplicationDetails();
+      }
+    }), 
   );
 }
 export default RecruiterMain;
