@@ -160,7 +160,7 @@ class UserModel {
 
   // Notifies the obvservers after any changes.
   notifyObservers() {
-    this.printModel();
+    //this.printModel();
     this.subscribers.forEach(callback => {
       try {
         callback();

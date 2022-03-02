@@ -5,9 +5,11 @@ import Navigation from "./js/presenters/navigation";
 import ApplicationSubmission from "./js/presenters/applicationSubmission";
 import RecruiterMain from "./js/presenters/recruiterMain";
 import ChosenApplicationDetails from "./js/presenters/chosenApplicationDetails";
+import RecruiterApplicantPresenter from "./js/presenters/recruiterApplicantPresenter";
 import NavigationSignup from "./js/presenters/navigationSignup";
 import NavigationSignin from "./js/presenters/navigationSignin";
 import NavigationSignout from "./js/presenters/navigationSignout";
+//import useModelProp from "../useModelProp";
 
 import './App.css';
 
@@ -19,21 +21,21 @@ const tempApplicantPageHref = "#applicantView";
 const tempRecruiterPageHref = "#recruiterMain";
 const goToApplicantPage = () => window.location.hash = "applicantView";
 const goToRecruiter = () => window.location.hash = "recruiterMain";
+const goToUserViewPageHref = "#userView";
 const goToApplicationDetails = () => window.location.hash = "applicationDetails";
-
 
 /**
  * 
  * @param {*} param0 
  * @returns div of the specified views according to the entered hash. 
  */
-function App({userModel}) {
+function App({userModel, applicationModel}) {
   return (
     <div className="App">
       <Navigation userModel={userModel}>
         <NavigationSignin userModel={userModel}/>
         <NavigationSignup userModel={userModel}/>
-        <NavigationSignout userModel={userModel} goToHomePageHref={goToHomePageHref} goToUserProfileHref={tempApplicantPageHref} />
+        <NavigationSignout userModel={userModel} goToHomePageHref={goToHomePageHref} goToUserProfileHref={goToUserViewPageHref} />
       </Navigation>
       <ShowView hash="#home">
         <div>
@@ -41,7 +43,14 @@ function App({userModel}) {
         </div>
       </ShowView>
 
-      <ShowView hash="#applicantView">
+      <ShowView hash="#userView">
+        <div>
+        {/* <Homepage /> */}
+         <RecruiterApplicantPresenter userModel={userModel} applicationModel={applicationModel} goToApplicationDetails ={null} goToHome= {null} />
+        </div>
+      </ShowView>
+
+      {/* <ShowView hash="#applicantView">
         <div>
           <ApplicationSubmission userModel={userModel} applicationModel={null} navToHome={goToRecruiter} />
         </div>
@@ -51,13 +60,13 @@ function App({userModel}) {
         <div>
           <RecruiterMain userModel={userModel} applicationModel={null} navToApplicationDetails={goToApplicationDetails} />
         </div>
-      </ShowView>
+      </ShowView> */}
 
-      <ShowView hash="#applicationDetails">
+      {/* <ShowView hash="#applicationDetails">
         <div>
           <ChosenApplicationDetails userModel={userModel} applicationModel={null} navToApplicationsList={goToHomePageHref} />
         </div>
-      </ShowView>
+      </ShowView> */}
     </div>
   );
 }
@@ -68,7 +77,7 @@ function App({userModel}) {
  * the defaultRoute() will change it back to #home
  */
 function defaultRoute() {
-  if (!["#home", "#userProfile", "#applicantView", "#recruiterMain", "#applicationDetails",].find(knownRoute =>
+  if (!["#home", "#applicationDetails","#userView",].find(knownRoute =>
     knownRoute === window.location.hash))
     window.location.hash = "#home";
 }

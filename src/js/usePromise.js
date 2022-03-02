@@ -14,7 +14,10 @@ function usePromise(promise) {
       setData(null);
       setError(null);
       if (promise != null) {
-        promise.then((result) => setData(result)).catch((e) => setError(e));
+         setData(promise);
+      }
+      else {
+        setError("something Went wrong in usePromise");
       }
     },
     [promise]
@@ -23,3 +26,22 @@ function usePromise(promise) {
 }
 
 export default usePromise;
+
+
+// function usePromise(promise) {
+//   const [data, setData] = React.useState(null);
+//   const [error, setError] = React.useState(null);
+//   React.useEffect(
+//     function () {
+//       setData(null);
+//       setError(null);
+//       if (promise != null) {
+//         promise.then((result) => setData(result)).catch((e) => setError(e));
+//       }
+//     },
+//     [promise]
+//   );
+//   return [data, error];
+// }
+
+// export default usePromise;
