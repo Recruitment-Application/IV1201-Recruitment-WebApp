@@ -9,7 +9,8 @@ import RecruiterApplicantPresenter from "./js/presenters/recruiterApplicantPrese
 import NavigationSignup from "./js/presenters/navigationSignup";
 import NavigationSignin from "./js/presenters/navigationSignin";
 import NavigationSignout from "./js/presenters/navigationSignout";
-// import useModelProp from "../useModelProp";
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 
 import './App.css';
 
@@ -67,6 +68,7 @@ function App({userModel, applicationModel}) {
           <ChosenApplicationDetails userModel={userModel} applicationModel={null} navToApplicationsList={goToHomePageHref} />
         </div>
       </ShowView> */}
+      <ToastContainer />
     </div>
   );
 }

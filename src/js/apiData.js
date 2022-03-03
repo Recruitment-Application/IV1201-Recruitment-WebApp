@@ -158,6 +158,31 @@ const ApiData = {
     },
 
 
+    submitApplication(competenceId, yearsOfExperience, dateFrom, dateTo) {
+
+        return this.apiCall(
+            'job/registerApplication'
+            , {
+                method: 'post',
+                credentials: 'include',
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    "competenceId": competenceId, "yearsOfExperience": yearsOfExperience,
+                    "dateFrom": dateFrom, "dateTo": dateTo
+                }),
+
+            }
+        )
+            .then((response) => {
+                return response;
+            });
+
+    },
+
+
 
     // filterApplications(username, password) {
 

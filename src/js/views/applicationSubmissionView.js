@@ -3,7 +3,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 
-const ApplicationSubmissionView = ({ job, competenceType, experienceYearsList, yearOfExperience, fromDate, setFromDate, toDate, setToDate, competenceTypesList, competenceApplication, competenceSubmited, isCompetenceAlreadySubmited, SubmitApplicationText, SubmitApplicationNav, signedIn }) => (
+const ApplicationSubmissionView = ({ job, competenceTypesList, setCompetenceType, experienceYearsList, setYearsOfExperience, fromDate, setFromDate, toDate, setToDate, submitApplicationText, submitApplication}) => (
   <div>
     <Container>
       <CardDeck className="p-2 d-flex flex-wrap justify-content-center m-3" >
@@ -12,7 +12,7 @@ const ApplicationSubmissionView = ({ job, competenceType, experienceYearsList, y
         <Card className="p-2 radiusDimensions borderlessTD">
 
           <Row className="justify-content-md-center mt-3">
-            <h1 className="textCenter"> Job: {job}</h1>
+            <h1 className="textCenter"> Job: {job.description}</h1>
           </Row>
           <InputGroup className="groupInputDisplayFix">
 
@@ -22,10 +22,10 @@ const ApplicationSubmissionView = ({ job, competenceType, experienceYearsList, y
 
                   <div className="p-2 btnSize">
                     <Form.Label>Your competence: </Form.Label>
-                    <Form.Control className="btnSize" size="md" as="select" onChange={(e) => competenceType(e.target.value)} required>
+                    <Form.Control className="btnSize" size="md" as="select" onChange={(e) => setCompetenceType(e.target.value)} required>
                       <option value="Competence" hidden> choose your competence type </option>
-                      {competenceTypesList.map((type, i) => (
-                        <option key={i} value={i} >{type}</option>
+                      {competenceTypesList.map(competence => (
+                        <option key={competence.competenceId} value={competence.competenceId} >{competence.competenceType}</option>
                       ))}
                     </Form.Control>
                   </div>
@@ -33,10 +33,10 @@ const ApplicationSubmissionView = ({ job, competenceType, experienceYearsList, y
                 <Col xs={4} className="p-3">
                   <div className="p-2 btnSize">
                     <Form.Label>Years of Experience: </Form.Label>
-                    <Form.Control size="md" as="select" onChange={(e) => yearOfExperience(e.target.value)} required>
+                    <Form.Control size="md" as="select" onChange={(e) => setYearsOfExperience(e.target.value)} required>
                       <option value="yearOfExperience" hidden>Ex. 1</option>
                       {experienceYearsList.map((years, i) => (
-                        <option key={i} value={i} >{years}</option>
+                        <option key={years} value={years} >{years}</option>
                       ))}
                     </Form.Control>
                   </div>
@@ -50,14 +50,15 @@ const ApplicationSubmissionView = ({ job, competenceType, experienceYearsList, y
                   <div className="p-2 btnSize">
                     <Form.Group controlId="formBasicFromDate">
                       <Form.Label>From:</Form.Label>
-                      <DatePicker className=" p-2" selected={fromDate} onChange={(date) => setFromDate(date)}
+                      <DatePicker className=" p-2"
+                        selected={fromDate}
+                        onChange={(date) => setFromDate(date)}
                         selectsStart
                         startDate={fromDate}
                         endDate={toDate}
                         minDate={new Date()}
-                        required
+                        dateFormat={'yyyy-MM-dd'}
                       />
-
                     </Form.Group>
 
                   </div>
@@ -74,7 +75,7 @@ const ApplicationSubmissionView = ({ job, competenceType, experienceYearsList, y
                         startDate={fromDate}
                         endDate={toDate}
                         minDate={fromDate}
-                        required
+                        dateFormat={'yyyy-MM-dd'}
                       />
                     </Form.Group>
 
@@ -82,9 +83,9 @@ const ApplicationSubmissionView = ({ job, competenceType, experienceYearsList, y
                 </Col>
               </Row>
             </InputGroup.Append>
-            <Button size="lg" className="mr-2 my-2" variant="outline-dark" onClick={(e) => { competenceSubmited(competenceApplication); SubmitApplicationNav(); }}
-              disabled={isCompetenceAlreadySubmited || !signedIn}>
-              {SubmitApplicationText}
+            <Button size="lg" className="mr-2 my-2" variant="outline-dark" onClick={(e) => { submitApplication();e.preventDefault();}}
+              >
+              {submitApplicationText}
             </Button>
           </InputGroup>
         </Card>

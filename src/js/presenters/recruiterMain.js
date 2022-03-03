@@ -26,30 +26,6 @@ function RecruiterMain({ userModel, applicationModel, navToApplicationDetails })
   );
 
 
-  const signedIn = true;
-
-  //const applicationsList = useModelProp(applicationModel, "applications");
-
-  // React.useEffect(
-  //   function () {
-  //     if (applicationsList === []) {
-  //       setPromise(setApplicationsList(applicationModel.getApplicationsList()));
-  //     }
-  //   },
-  //   [applicationsList]
-  // );
-
-
-
-  // React.useEffect(
-  //   function () {
-  //     if (signedIn) {
-  //       setaddApplicationToList("Submit the application");
-  //     }
-  //   },
-  //   [signedIn]
-  // );
-
 
   /**
    * The first render for the RecruiterFilterView which allows the recruiter filter the application according to the entered attributes. 
@@ -70,7 +46,6 @@ function RecruiterMain({ userModel, applicationModel, navToApplicationDetails })
         //setPromise(applicationModel.getApplicationsList());
         applicationModel.filterDateInApplicationAndForwardToApiData(name, chosenCompetence, fromDate, toDate, pageNum);
       }, // will be replaced with the handler for the filter.
-      signedIn: signedIn
     }),
     modelApplicationsList &&
     React.createElement(FilteredApplicationsView, {

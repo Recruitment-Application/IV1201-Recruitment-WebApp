@@ -7,10 +7,6 @@ class ApplicationModel {
         this.subscribers = [];
         this.competenceList = [];
 
-        // this.competence = {
-        //     competenceId: null,
-        //     competenceType: null,
-        // }
         this.job = {
             jobID: null,
             jobDescription: null,
@@ -21,6 +17,7 @@ class ApplicationModel {
         this.errorData = null;
         this.filledDataOnce = false;
         this.currentApplicationID = null;
+        this.latestSubmitedApplicationID = null;
         this.getJobs();
     }
 
@@ -31,7 +28,7 @@ class ApplicationModel {
             if (result.ok) {
                 result.json().then((data) => {
                     let dataContent = data.success;
-                    this.populateJobData({ dataContent });
+                    this.populateJobData( dataContent );
                 });
             }
         });
@@ -51,7 +48,7 @@ class ApplicationModel {
                 if (result.ok) {
                     result.json().then((data) => {
                         let dataContent = data.success;
-                        this.populateApplicationsData({ dataContent });
+                        this.populateApplicationsData( dataContent );
                         this.notifyObservers();
                     });
                 }
@@ -59,16 +56,18 @@ class ApplicationModel {
 
     }
 
+    
+
     filterDateInApplicationAndForwardToApiData(unfilteredName, unfilteredCompetenceId, unfilterdDateFrom, unfilterdDateTo, unfilteredPageNum) {
         let dateFrom = "";
         let dateTo = "";
         let name = "";
         let competenceId = 0;
-        if (unfilterdDateFrom !== "" && unfilterdDateFrom !== undefined) {
+        if (unfilterdDateFrom !== "" && unfilterdDateFrom !== undefined && unfilterdDateFrom !== null) {
             const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
             dateFrom = unfilterdDateFrom.toLocaleDateString('sv-SE', options);
         }
-        if (unfilterdDateTo !== "" && unfilterdDateTo !== undefined) {
+        if (unfilterdDateTo !== "" && unfilterdDateTo !== undefined && unfilterdDateTo !== null) {
             const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
             dateTo = unfilterdDateTo.toLocaleDateString('sv-SE', options);
         }
@@ -83,9 +82,57 @@ class ApplicationModel {
 
         this.filterApplicationsByRecruiter(name, competenceId, dateFrom, dateTo, unfilteredPageNum);
 
+    }
 
+
+    submitApplication(competenceId, yearsOfExperience, dateFrom, dateTo) {
+
+        ApiData.submitApplication(competenceId, yearsOfExperience, dateFrom, dateTo)
+            .then((result) => {
+                console.log("submitApplication");
+                console.log(result);
+                if (result.ok) {
+                    result.json().then((data) => {
+                        let dataContent = data.success;
+                        this.populateSubmitedApplicationData( dataContent );
+                    });
+                }
+            });
 
     }
+
+
+    filterDateInApplicationSubmissionAndForwardToApiData(unfilteredCompetenceID, unfilteredYearsOfExperience, unfilterdDateFrom, unfilterdDateTo) {
+        let dateFrom = "";
+        let dateTo = "";
+        let competenceId = 0;
+        let yearsOfExperience = 0;
+        if (unfilterdDateFrom !== "" && unfilterdDateFrom !== undefined) {
+            const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+            dateFrom = unfilterdDateFrom.toLocaleDateString('sv-SE', options);
+        }
+        if (unfilterdDateTo !== "" && unfilterdDateTo !== undefined) {
+            const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+            dateTo = unfilterdDateTo.toLocaleDateString('sv-SE', options);
+        }
+        if (unfilteredCompetenceID !== "") {
+            competenceId = parseInt(unfilteredCompetenceID);
+        }
+        if (unfilteredYearsOfExperience !== "") {
+            yearsOfExperience = parseInt(unfilteredYearsOfExperience);
+        }
+        //unfilteredPageNum should be handled (can be 0, 1, 2, etc.) from user/default
+
+        console.log("filterDateInApplicationSubmissionAndForwardToApiData: ");
+        console.log(competenceId);
+        console.log(yearsOfExperience);
+        console.log(dateFrom);
+        console.log(dateTo);
+        
+        this.submitApplication(competenceId, yearsOfExperience, dateFrom, dateTo);
+
+    }
+
 
     // Reports an error and notify the observers.
     reportError(code, message) {
@@ -97,7 +144,7 @@ class ApplicationModel {
      * fill the userData with the passed data of loggedIn, username and role.
      * @param {*} param0 
      */
-    populateJobData({ dataContent }) {
+    populateJobData(dataContent) {
         if (!this.filledDataOnce) {
 
 
@@ -112,7 +159,6 @@ class ApplicationModel {
                     }
                     this.competenceList = [competence, ...this.competenceList];
                 }
-                console.log(this.competenceList);
 
                 this.job = {
                     jobID: dataContent[i].jobID,
@@ -128,14 +174,23 @@ class ApplicationModel {
     }
 
     populateApplicationsData(filteredApplications) {
-        let applications = filteredApplications.dataContent.applications;
+        let applications = filteredApplications.applications;
         this.applicationsList = applications;
 
         this.notifyObservers();
     }
 
+    populateSubmitedApplicationData(dataContent) {
+        this.latestSubmitedApplicationID = dataContent.applicationID;
+        this.notifyObservers();
+        console.log(this.latestSubmitedApplicationID);
+    }
+
+    getSubmitedApplicationID() {
+        return this.latestSubmitedApplicationID;
+    }
+
     getApplicationsList() {
-        //console.log(this.applicationsList);
         return this.applicationsList;
     }
 
@@ -159,6 +214,11 @@ class ApplicationModel {
     //     this.errorData = null;
     //     this.notifyObservers();
     // }
+
+    emptySubmitedApplicationID() {
+        this.latestSubmitedApplicationID = null;
+        this.notifyObservers();
+    }
 
     /**
      * empties the errorData and set its value to null, and then notify the observers.
