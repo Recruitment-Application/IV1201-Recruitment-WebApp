@@ -16,17 +16,8 @@ const ApiData = {
             .then((response) => {
 
                 return response;
-            });
-        return fetchData;
-
-    },
-
-    apiCallQuery(urlPath, requestContent) {
-        const fetchData = fetch(BASE_URL + urlPath, requestContent)
-            .then((response) => {
-
-                return response;
-            });
+            })
+            .catch((error) => {throw error;});
         return fetchData;
 
     },
@@ -143,7 +134,7 @@ const ApiData = {
     },
 
     listApplications(name, competenceId, dateFrom, dateTo, page) {
-        return this.apiCallQuery(
+        return this.apiCall(
             'job/listApplications?' + new URLSearchParams({
                 "name": name, "competenceId": competenceId,
                 "dateFrom": dateFrom, "dateTo": dateTo, "page": page
@@ -158,7 +149,7 @@ const ApiData = {
     },
 
     getApplicationDetails(applicationId) {
-        return this.apiCallQuery(
+        return this.apiCall(
             'job/getApplication?' + new URLSearchParams({
                 "applicationId": applicationId
             })

@@ -2,11 +2,9 @@
 import ApiData from "./apiData";
 
 class ApplicationModel {
-
     constructor() {
         this.subscribers = [];
         this.competenceList = [];
-
         this.job = {
             jobID: null,
             jobDescription: null,
@@ -17,26 +15,31 @@ class ApplicationModel {
         this.errorData = null;
         this.filledDataOnce = false;
         this.currentApplicationID = null;
-        this.latestSubmitedApplicationID = null;
+        this.latestSubmittedApplicationID = null;
         this.chosenApplicationData = null;
-        this.latestApplicationDecision = null
-        this.getJobs();
+        this.latestApplicationDecision = null;
     }
-
 
     // Performs login to existing account and fills the userModel with the user data.
     getJobs() {
-        ApiData.getJobs().then((result) => {
-            if (result.ok) {
-                result.json().then((data) => {
-                    let dataContent = data.success;
-                    this.populateJobData(dataContent);
-                });
-            }
-        });
+        ApiData.getJobs()
+            .then((result) => {
+                if (result.ok) {
+                    result.json().then((data) => {
+                        let dataContent = data.success;
+                        this.populateJobData(dataContent);
+                    });
+                }
+            })
+            .catch((error) => {
+                if (error instanceof TypeError) {
+                    this.handleErrorMessages(503, 'There is no connection to the server or the server is unavailable.');
+                } else {
+                    this.handleErrorMessages(503, 'Something went wrong in the website or the service.');
+                }
+            });
 
     }
-
 
     // 
     getCompetenceList() {
@@ -44,7 +47,6 @@ class ApplicationModel {
     }
 
     filterApplications(name, competenceId, dateFrom, dateTo, pageNum) {
-
         ApiData.listApplications(name, competenceId, dateFrom, dateTo, pageNum)
             .then((result) => {
                 if (result.ok) {
@@ -52,6 +54,17 @@ class ApplicationModel {
                         let dataContent = data.success;
                         this.populateApplicationsData(dataContent);
                     });
+                } else {
+                    result.json().then((data) => {
+                      this.handleErrorMessages(result.status, data.error);
+                    });
+                  }
+            })
+            .catch((error) => {
+                if (error instanceof TypeError) {
+                    this.handleErrorMessages(503, 'There is no connection to the server or the server is unavailable.');
+                } else {
+                    this.handleErrorMessages(503, 'Something went wrong in the website or the service.');
                 }
             });
 
@@ -59,7 +72,6 @@ class ApplicationModel {
 
 
     getChosenApplicationData(applicationId) {
-
         ApiData.getApplicationDetails(applicationId)
             .then((result) => {
                 if (result.ok) {
@@ -67,13 +79,23 @@ class ApplicationModel {
                         let dataContent = data.success;
                         this.populateChosenApplicationData(dataContent);
                     });
+                } else {
+                    result.json().then((data) => {
+                      this.handleErrorMessages(result.status, data.error);
+                    });
+                  }
+            })
+            .catch((error) => {
+                if (error instanceof TypeError) {
+                    this.handleErrorMessages(503, 'There is no connection to the server or the server is unavailable.');
+                } else {
+                    this.handleErrorMessages(503, 'Something went wrong in the website or the service.');
                 }
             });
 
     }
 
     updateApplicationDecision(applicationId, decision) {
-
         ApiData.submitApplicationDecision(applicationId, decision)
             .then((result) => {
                 if (result.ok) {
@@ -81,12 +103,21 @@ class ApplicationModel {
                         let dataContent = data.success;
                         this.populateTakenDecisionData(dataContent);
                     });
+                } else {
+                    result.json().then((data) => {
+                      this.handleErrorMessages(result.status, data.error);
+                    });
+                  }
+            })
+            .catch((error) => {
+                if (error instanceof TypeError) {
+                    this.handleErrorMessages(503, 'There is no connection to the server or the server is unavailable.');
+                } else {
+                    this.handleErrorMessages(503, 'Something went wrong in the website or the service.');
                 }
             });
 
     }
-
-
 
     filterUnFilteredApplicationsData(unfilteredName, unfilteredCompetenceId, unfilterdDateFrom, unfilterdDateTo, unfilteredPageNum) {
         let dateFrom = "";
@@ -116,14 +147,24 @@ class ApplicationModel {
 
 
     submitApplication(competenceId, yearsOfExperience, dateFrom, dateTo) {
-
         ApiData.submitApplication(competenceId, yearsOfExperience, dateFrom, dateTo)
             .then((result) => {
                 if (result.ok) {
                     result.json().then((data) => {
                         let dataContent = data.success;
-                        this.populateSubmitedApplicationData(dataContent);
+                        this.populateSubmittedApplicationData(dataContent);
                     });
+                } else {
+                    result.json().then((data) => {
+                      this.handleErrorMessages(result.status, data.error);
+                    });
+                  }
+            })
+            .catch((error) => {
+                if (error instanceof TypeError) {
+                    this.handleErrorMessages(503, 'There is no connection to the server or the server is unavailable.');
+                } else {
+                    this.handleErrorMessages(503, 'Something went wrong in the website or the service.');
                 }
             });
 
@@ -156,7 +197,11 @@ class ApplicationModel {
     }
 
 
-    // Reports an error and notify the observers.
+    /**
+   * Notify the observers for the error encountered during some operation and pass on the error information.
+   * @param {number} code The status code related to the error.
+   * @param {string} message The message explanting the error.
+   */
     reportError(code, message) {
         this.errorData = { code: code, message: message };
         this.notifyObservers();
@@ -221,13 +266,13 @@ class ApplicationModel {
         return this.chosenApplicationData;
     }
 
-    populateSubmitedApplicationData(dataContent) {
-        this.latestSubmitedApplicationID = dataContent.applicationID;
+    populateSubmittedApplicationData(dataContent) {
+        this.latestSubmittedApplicationID = dataContent.applicationID;
         this.notifyObservers();
     }
 
-    getSubmitedApplicationID() {
-        return this.latestSubmitedApplicationID;
+    getSubmittedApplicationID() {
+        return this.latestSubmittedApplicationID;
     }
 
     getApplicationsList() {
@@ -260,14 +305,14 @@ class ApplicationModel {
     //     this.notifyObservers();
     // }
 
-    emptySubmitedApplicationID() {
-        this.latestSubmitedApplicationID = null;
+    emptySubmittedApplicationID() {
+        this.latestSubmittedApplicationID = null;
         this.notifyObservers();
     }
 
     /**
-     * empties the errorData and set its value to null, and then notify the observers.
-     */
+   * Reset the info about the error that was recently encountered and notify the observers.
+   */
     emptyErrorData() {
         this.errorData = null;
         this.notifyObservers();
@@ -307,7 +352,24 @@ class ApplicationModel {
         });
     }
 
+    /**
+   * Handle the errors that the website encounters.
+   * @param {number} status The status code related to the error.
+   * @param {string | {msg, param}} error The error that happened.
+   */
+    handleErrorMessages(status, error) {
+        if (typeof error === 'string') {
+            this.reportError(status, error);
+            return;
+        }
 
+        let message = '';
+
+        error.errors.forEach((err) => {
+            message = err.msg + ' for ' + err.param;
+            this.reportError(status, message);
+        });
+    }
 }
 
 export default ApplicationModel;

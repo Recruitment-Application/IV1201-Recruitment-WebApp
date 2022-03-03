@@ -1,27 +1,51 @@
 import React from "react";
 import useModelProp from "../useModelProp";
 import NavigationView from "../views/navigationView";
+import {toast} from 'react-toastify';
 
-function Navigation({ userModel, children }) {
-
-  const signedIn = useModelProp(userModel, "loggedIn"); // Observe the loggedIn property using observer pattern and React hooks
+function Navigation({ userModel, applicationModel, children }) {
+  // Observe the loggedIn property using observer pattern and React hooks
+  const signedIn = useModelProp(userModel, "loggedIn"); 
   
-  const [navigationSigninComponent, navigationSignupComponent, navigationSignoutComponent] = children; // Destructure the children array
+  // Destructure the children array
+  const [navigationSigninComponent, navigationSignupComponent, navigationSignoutComponent] = children; 
 
-  const [toggleState, setToggleState] = React.useState(false); // The toggleState indicates whether the navigation bar is collapsed or not
+  // Observe the errorData property using observer pattern and React hooks
+  const errorDataUser = useModelProp(userModel, "errorData"); 
+  const errorDataApplication = useModelProp(applicationModel, "errorData"); 
 
-  // if (errorData) {
-  //   toast.error(errorData.message, {
-  //     position: toast.POSITION.TOP_CENTER,
-  //     autoClose: 4000,
-  //     hideProgressBar: true,
-  //     closeOnClick: true,
-  //     pauseOnHover: true,
-  //     draggable: true,
-  //     progress: undefined
-  //   });
-  //   userModel.emptyErrorData();
-  // } // Show an error message when an error occurs 
+  // The toggleState indicates whether the navigation bar is collapsed or not
+  const [toggleState, setToggleState] = React.useState(false); 
+
+  if (errorDataUser) {
+    toast.error(errorDataUser.message, {
+      position: toast.POSITION.TOP_CENTER,
+      autoClose: 4000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored"
+    });
+    
+    userModel.emptyErrorData();
+  }
+
+  if (errorDataApplication) {
+    toast.error(errorDataApplication.message, {
+      position: toast.POSITION.TOP_CENTER,
+      autoClose: 4000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored"
+    });
+
+    applicationModel.emptyErrorData();
+  }
   
   /**
    * if the applicant or recruiter is signed in, 

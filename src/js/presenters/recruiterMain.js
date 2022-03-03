@@ -16,17 +16,6 @@ function RecruiterMain({ userModel, applicationModel, navToApplicationDetails })
   let modelApplicationsList = useModelProp(applicationModel, "applicationsList");
   let pageNum = 0;
   
-  React.useEffect(
-    function () {
-      if (modelRoleId === 1 && filledDataOnceInList === false) {
-        applicationModel.getJobs();
-      }
-    },
-    [modelRoleId]
-  );
-
-
-
   /**
    * The first render for the RecruiterFilterView which allows the recruiter filter the application according to the entered attributes. 
    * The second render is for FilteredApplicationsView which display the filtered applications.
