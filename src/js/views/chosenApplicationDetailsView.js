@@ -1,7 +1,7 @@
 import { Button, CardDeck, Card, InputGroup, Form, Row, Col } from "react-bootstrap";
 
 
-const ChosenApplicationDetailsView = ({ firstName, lastName, competence, availableFrom, availableTo, yearsOfExperience, decisionList, takenDecision, applicationId, makeDescision }) => (
+const ChosenApplicationDetailsView = ({applicationData, decisionList, setDecision, makeDescision, navToApplicationsList }) => (
   <div className="applicationDetailsDiv">
     <CardDeck className="p-2 d-flex flex-wrap justify-content-center m-3" >
 
@@ -13,31 +13,31 @@ const ChosenApplicationDetailsView = ({ firstName, lastName, competence, availab
         <Row className="p-2 d-flex align-items-center">
           <Col>
             <strong>First Name: </strong>
-            {firstName}
+            {applicationData.firstName}
           </Col>
           <Col >
             <strong>Last Name: </strong>
-            {lastName}
+            {applicationData.lastName}
           </Col>
         </Row>
         <Row className="p-2">
           <Col>
             <strong>Competence: </strong>
-            {competence}
+            {applicationData.competenceType}
           </Col>
           <Col>
             <strong>Years of Experience: </strong>
-            {yearsOfExperience}
+            {applicationData.yearsOfExperience}
           </Col>
         </Row>
         <Row className="p-2">
           <Col>
             <strong>Available from: </strong>
-            {availableFrom}
+            {applicationData.dateFrom}
           </Col>
           <Col>
             <strong>Available To: </strong>
-            {availableTo}
+            {applicationData.dateTo}
           </Col>
         </Row>
         <Row>
@@ -45,10 +45,10 @@ const ChosenApplicationDetailsView = ({ firstName, lastName, competence, availab
             <Col>
               <InputGroup.Append className=" btnSize ">
                 <Form.Label className="p-2"><strong>Decision: </strong></Form.Label>
-                <Form.Control className="" size="md" as="select" onChange={(e) => takenDecision(e.target.value)} required>
+                <Form.Control className="" size="md" as="select" onChange={(e) => setDecision(e.target.value)} required>
                   <option value="Competence" hidden> choose your decision </option>
                   {decisionList.map((decision, i) => (
-                    <option key={i} value={i} >{decision}</option>
+                    <option key={i} value={decision} >{decision}</option>
                   ))}
                 </Form.Control>
               </InputGroup.Append>
@@ -56,7 +56,13 @@ const ChosenApplicationDetailsView = ({ firstName, lastName, competence, availab
 
           </div>
           <Col>
-            <Button id="makeDecisionButton" className="mr-2 btnSize p-2 " variant="outline-dark" >Make Decision</Button>
+            <Button id="makeDecisionButton" className="mr-2 btnSize p-2 " variant="outline-dark" 
+            onClick={(e) => {
+              e.preventDefault();
+              makeDescision();
+              navToApplicationsList();
+            }
+              }>Submit the Decision</Button>
           </Col>
         </Row>
 

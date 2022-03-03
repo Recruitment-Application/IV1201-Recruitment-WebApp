@@ -1,7 +1,7 @@
 import { Table, Button } from "react-bootstrap";
 
 
-const FilteredApplicationsView = ({ applicationsList, showApplicationDetails }) => (
+const FilteredApplicationsView = ({ applicationsList, showApplicationDetails, navToApplicationDetails }) => (
     <Table striped bordered hover>
       <thead>
         <tr>
@@ -14,7 +14,7 @@ const FilteredApplicationsView = ({ applicationsList, showApplicationDetails }) 
 
         {
           applicationsList.map(ApplicationDetails =>
-            <tr>
+            <tr key={ApplicationDetails.applicationID}>
               <td>
                 {ApplicationDetails.firstName}
               </td>
@@ -24,6 +24,7 @@ const FilteredApplicationsView = ({ applicationsList, showApplicationDetails }) 
               <td><Button onClick={(e) => {
                 e.preventDefault();
                 showApplicationDetails(ApplicationDetails.applicationID);
+                navToApplicationDetails();
               }} variant="outline-dark" >Show</Button>
               </td>
             </tr>

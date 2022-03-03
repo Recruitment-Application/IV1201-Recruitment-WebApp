@@ -16,13 +16,8 @@ import './App.css';
 
 
 const goToHomePageHref = "#home";
-const goToUserProfileHref = "#userProfile";
-const goToChooseApplicantRecruiterHref = "#applicationDetails";
-const tempApplicantPageHref = "#applicantView";
-const tempRecruiterPageHref = "#recruiterMain";
-const goToApplicantPage = () => window.location.hash = "applicantView";
-const goToRecruiter = () => window.location.hash = "recruiterMain";
-const goToUserViewPageHref = "#userView";
+const userViewPageHref = "#userView";
+const goToUserView = () => window.location.hash = "userView";
 const goToApplicationDetails = () => window.location.hash = "applicationDetails";
 
 /**
@@ -36,7 +31,7 @@ function App({userModel, applicationModel}) {
       <Navigation userModel={userModel}>
         <NavigationSignin userModel={userModel}/>
         <NavigationSignup userModel={userModel}/>
-        <NavigationSignout userModel={userModel} goToHomePageHref={goToHomePageHref} goToUserProfileHref={goToUserViewPageHref} />
+        <NavigationSignout userModel={userModel} goToHomePageHref={goToHomePageHref} goToUserProfileHref={userViewPageHref} />
       </Navigation>
       <ShowView hash="#home">
         <div>
@@ -46,28 +41,15 @@ function App({userModel, applicationModel}) {
 
       <ShowView hash="#userView">
         <div>
-        {/* <Homepage /> */}
-         <RecruiterApplicantPresenter userModel={userModel} applicationModel={applicationModel} goToApplicationDetails ={null} goToHome= {null} />
+         <RecruiterApplicantPresenter userModel={userModel} applicationModel={applicationModel} navToApplicationDetails ={goToApplicationDetails} goToHome= {null} />
         </div>
       </ShowView>
 
-      {/* <ShowView hash="#applicantView">
+      <ShowView hash="#applicationDetails">
         <div>
-          <ApplicationSubmission userModel={userModel} applicationModel={null} navToHome={goToRecruiter} />
+          <ChosenApplicationDetails userModel={userModel} applicationModel={applicationModel} navToApplicationsList={goToUserView} />
         </div>
       </ShowView>
-      
-      <ShowView hash="#recruiterMain">
-        <div>
-          <RecruiterMain userModel={userModel} applicationModel={null} navToApplicationDetails={goToApplicationDetails} />
-        </div>
-      </ShowView> */}
-
-      {/* <ShowView hash="#applicationDetails">
-        <div>
-          <ChosenApplicationDetails userModel={userModel} applicationModel={null} navToApplicationsList={goToHomePageHref} />
-        </div>
-      </ShowView> */}
       <ToastContainer />
     </div>
   );

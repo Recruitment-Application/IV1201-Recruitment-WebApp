@@ -157,6 +157,20 @@ const ApiData = {
         });
     },
 
+    getApplicationDetails(applicationId) {
+        return this.apiCallQuery(
+            'job/getApplication?' + new URLSearchParams({
+                "applicationId": applicationId
+            })
+            , {
+                method: 'get',
+                credentials: 'include',
+            }
+        ).then((response) => {
+            return response;
+        });
+    },
+
 
     submitApplication(competenceId, yearsOfExperience, dateFrom, dateTo) {
 
@@ -182,26 +196,26 @@ const ApiData = {
 
     },
 
+    submitApplicationDecision(applicationId, decision) {
+
+        return this.apiCall(
+            'job/submitDecision'
+            , {
+                method: 'put',
+                credentials: 'include',
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ "applicationId": applicationId, "decision": decision }),
+
+            }
+        ).then((response) => {
+            return response;
+        });
+    },
 
 
-    // filterApplications(username, password) {
-
-    //     return this.apiCall(
-    //         'user/signin'
-    //         , {
-    //             method: 'post',
-    //             credentials: 'include',
-    //             headers: {
-    //                 'Accept': 'application/json, text/plain, */*',
-    //                 'Content-Type': 'application/json'
-    //             },
-    //             body: JSON.stringify({ "username": username, "password": password }),
-
-    //         }
-    //     ).then((response) => {
-    //         return response;
-    //     });
-    // },
 
 };
 

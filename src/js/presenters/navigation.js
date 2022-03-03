@@ -4,9 +4,8 @@ import NavigationView from "../views/navigationView";
 
 function Navigation({ userModel, children }) {
 
-  const loggedIn = useModelProp(userModel, "loggedIn"); // Observe the loggedIn property using observer pattern and React hooks
-  // const errorData = useModelProp(userModel, "errorData"); // Observe the errorData property using observer pattern and React hooks
-
+  const signedIn = useModelProp(userModel, "loggedIn"); // Observe the loggedIn property using observer pattern and React hooks
+  
   const [navigationSigninComponent, navigationSignupComponent, navigationSignoutComponent] = children; // Destructure the children array
 
   const [toggleState, setToggleState] = React.useState(false); // The toggleState indicates whether the navigation bar is collapsed or not
@@ -28,7 +27,7 @@ function Navigation({ userModel, children }) {
    * if the applicant or recruiter is signed in, 
    * The function will render the signout child component when a user is logged in
    */
-  if(loggedIn) {
+  if(signedIn) {
     return React.createElement(NavigationView, {
       component: navigationSignoutComponent,
       toggleState: toggleState,
