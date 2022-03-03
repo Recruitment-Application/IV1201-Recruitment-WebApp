@@ -18,7 +18,7 @@ function RecruiterMain({ userModel, applicationModel, navToApplicationDetails })
   
   React.useEffect(
     function () {
-      if (modelRoleId == 1 && filledDataOnceInList == false) {
+      if (modelRoleId === 1 && filledDataOnceInList === false) {
         applicationModel.getJobs();
       }
     },
@@ -43,17 +43,17 @@ function RecruiterMain({ userModel, applicationModel, navToApplicationDetails })
       toDate: toDate,
       setToDate: toDate => setToDate(toDate),
       handleAppliedFilter: () => {
-        //setPromise(applicationModel.getApplicationsList());
-        applicationModel.filterDateInApplicationAndForwardToApiData(name, chosenCompetence, fromDate, toDate, pageNum);
-      }, // will be replaced with the handler for the filter.
+        applicationModel.filterUnFilteredApplicationsData(name, chosenCompetence, fromDate, toDate, pageNum);
+      },
     }),
     modelApplicationsList &&
     React.createElement(FilteredApplicationsView, {
       applicationsList: modelApplicationsList,
       showApplicationDetails: (applicationID) => {
         applicationModel.setCurrentApplicationID(applicationID);
-        navToApplicationDetails();
-      }
+        applicationModel.getChosenApplicationData(applicationID);
+      },
+      navToApplicationDetails: navToApplicationDetails,
     }), 
   );
 }

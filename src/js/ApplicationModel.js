@@ -18,6 +18,8 @@ class ApplicationModel {
         this.filledDataOnce = false;
         this.currentApplicationID = null;
         this.latestSubmitedApplicationID = null;
+        this.chosenApplicationData = null;
+        this.latestApplicationDecision = null
         this.getJobs();
     }
 
@@ -28,7 +30,7 @@ class ApplicationModel {
             if (result.ok) {
                 result.json().then((data) => {
                     let dataContent = data.success;
-                    this.populateJobData( dataContent );
+                    this.populateJobData(dataContent);
                 });
             }
         });
@@ -41,24 +43,52 @@ class ApplicationModel {
         return this.competenceList; // will this be called and list the jobs as well, or just the competenceList for one job ?
     }
 
-    filterApplicationsByRecruiter(name, competenceId, dateFrom, dateTo, pageNum) {
+    filterApplications(name, competenceId, dateFrom, dateTo, pageNum) {
 
         ApiData.listApplications(name, competenceId, dateFrom, dateTo, pageNum)
             .then((result) => {
                 if (result.ok) {
                     result.json().then((data) => {
                         let dataContent = data.success;
-                        this.populateApplicationsData( dataContent );
-                        this.notifyObservers();
+                        this.populateApplicationsData(dataContent);
                     });
                 }
             });
 
     }
 
-    
 
-    filterDateInApplicationAndForwardToApiData(unfilteredName, unfilteredCompetenceId, unfilterdDateFrom, unfilterdDateTo, unfilteredPageNum) {
+    getChosenApplicationData(applicationId) {
+
+        ApiData.getApplicationDetails(applicationId)
+            .then((result) => {
+                if (result.ok) {
+                    result.json().then((data) => {
+                        let dataContent = data.success;
+                        this.populateChosenApplicationData(dataContent);
+                    });
+                }
+            });
+
+    }
+
+    updateApplicationDecision(applicationId, decision) {
+
+        ApiData.submitApplicationDecision(applicationId, decision)
+            .then((result) => {
+                if (result.ok) {
+                    result.json().then((data) => {
+                        let dataContent = data.success;
+                        this.populateTakenDecisionData(dataContent);
+                    });
+                }
+            });
+
+    }
+
+
+
+    filterUnFilteredApplicationsData(unfilteredName, unfilteredCompetenceId, unfilterdDateFrom, unfilterdDateTo, unfilteredPageNum) {
         let dateFrom = "";
         let dateTo = "";
         let name = "";
@@ -80,7 +110,7 @@ class ApplicationModel {
         //unfilteredPageNum should be handled (can be 0, 1, 2, etc.) from user/default
 
 
-        this.filterApplicationsByRecruiter(name, competenceId, dateFrom, dateTo, unfilteredPageNum);
+        this.filterApplications(name, competenceId, dateFrom, dateTo, unfilteredPageNum);
 
     }
 
@@ -89,12 +119,10 @@ class ApplicationModel {
 
         ApiData.submitApplication(competenceId, yearsOfExperience, dateFrom, dateTo)
             .then((result) => {
-                console.log("submitApplication");
-                console.log(result);
                 if (result.ok) {
                     result.json().then((data) => {
                         let dataContent = data.success;
-                        this.populateSubmitedApplicationData( dataContent );
+                        this.populateSubmitedApplicationData(dataContent);
                     });
                 }
             });
@@ -102,7 +130,7 @@ class ApplicationModel {
     }
 
 
-    filterDateInApplicationSubmissionAndForwardToApiData(unfilteredCompetenceID, unfilteredYearsOfExperience, unfilterdDateFrom, unfilterdDateTo) {
+    filterSubmittedApplicationData(unfilteredCompetenceID, unfilteredYearsOfExperience, unfilterdDateFrom, unfilterdDateTo) {
         let dateFrom = "";
         let dateTo = "";
         let competenceId = 0;
@@ -123,12 +151,6 @@ class ApplicationModel {
         }
         //unfilteredPageNum should be handled (can be 0, 1, 2, etc.) from user/default
 
-        console.log("filterDateInApplicationSubmissionAndForwardToApiData: ");
-        console.log(competenceId);
-        console.log(yearsOfExperience);
-        console.log(dateFrom);
-        console.log(dateTo);
-        
         this.submitApplication(competenceId, yearsOfExperience, dateFrom, dateTo);
 
     }
@@ -149,8 +171,6 @@ class ApplicationModel {
 
 
             for (let i = 0; i < dataContent.length; i++) {
-
-                //let competenceNum = data.success[i].competences.length;
 
                 for (let j = 0; j < dataContent[i].competences.length; j++) {
                     let competence = {
@@ -180,10 +200,30 @@ class ApplicationModel {
         this.notifyObservers();
     }
 
+    populateChosenApplicationData(applicationDetails) {
+        let chosenApplicationData = {
+            applicationID: applicationDetails.applicationID,
+            firstName: applicationDetails.firstName,
+            lastName: applicationDetails.lastName,
+            competenceType: applicationDetails.competence.type,
+            yearsOfExperience: applicationDetails.yearsOfExperience,
+            dateFrom: applicationDetails.dateFrom,
+            dateTo: applicationDetails.dateTo,
+            decision: applicationDetails.decision,
+
+        }
+
+        this.chosenApplicationData = chosenApplicationData;
+        this.notifyObservers();
+    }
+
+    returnChosenApplicationDetails() {
+        return this.chosenApplicationData;
+    }
+
     populateSubmitedApplicationData(dataContent) {
         this.latestSubmitedApplicationID = dataContent.applicationID;
         this.notifyObservers();
-        console.log(this.latestSubmitedApplicationID);
     }
 
     getSubmitedApplicationID() {
@@ -202,6 +242,11 @@ class ApplicationModel {
 
     getCurrentApplicationID() {
         return this.currentApplicationID;
+    }
+
+    populateTakenDecisionData(dataContent) {
+        this.latestApplicationDecision = dataContent.decision;
+        this.notifyObservers();
     }
 
     /**

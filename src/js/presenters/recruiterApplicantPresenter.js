@@ -3,12 +3,9 @@ import useModelProp from "../useModelProp";
 import RecruiterMain from "./recruiterMain";
 import ApplicationSubmission from "./applicationSubmission";
 import FailedSignInView from "../views/failedSignInView";
+import RolesEnum from "../rolesEnum";
 
-function RecruiterApplicantPresenter({ userModel, applicationModel, goToApplicationDetails, goToHome }) {
-
-  const loggedIn = useModelProp(userModel, "loggedIn"); // Observe the loggedIn property using observer pattern and React hooks
-
-  const [toggleState, setToggleState] = React.useState(false); // The toggleState indicates whether the navigation bar is collapsed or not
+function RecruiterApplicantPresenter({ userModel, applicationModel, navToApplicationDetails, goToHome }) {
 
   const modelRoleId = useModelProp(userModel, "role");
  
@@ -30,10 +27,10 @@ function RecruiterApplicantPresenter({ userModel, applicationModel, goToApplicat
    * The function will render the signout child component when a user is logged in
    */
 
-  if(modelRoleId == 1) {
-   return <RecruiterMain userModel={userModel} applicationModel={applicationModel} navToApplicationDetails={goToApplicationDetails}/>
+  if(modelRoleId === RolesEnum.Recruiter) {
+   return <RecruiterMain userModel={userModel} applicationModel={applicationModel} navToApplicationDetails={navToApplicationDetails}/>
   }
-  else if(modelRoleId == 2) {
+  else if(modelRoleId === RolesEnum.Applicant) {
    return <ApplicationSubmission userModel = {userModel} applicationModel = {applicationModel} navToHome = {goToHome}/>
   }
   //This can be kept or replaced with a toastify informing user to signin first.
