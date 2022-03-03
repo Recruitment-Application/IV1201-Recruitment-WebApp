@@ -16,7 +16,7 @@ function ApplicationSubmission({ userModel, applicationModel, navToHome }) {
 
   let competenceTypesList = useModelProp(applicationModel, "competenceList");
   let job = useModelProp(applicationModel, "job");
-  let applicationID = useModelProp(applicationModel, "latestSubmitedApplicationID");
+  let applicationID = useModelProp(applicationModel, "latestSubmittedApplicationID");
   let modelRoleId = useModelProp(userModel, "role");
 
 
@@ -48,7 +48,7 @@ function ApplicationSubmission({ userModel, applicationModel, navToHome }) {
       progress: undefined,
       theme: "colored"
     });
-    applicationModel.emptySubmitedApplicationID();
+    applicationModel.emptySubmittedApplicationID();
   }
 
 

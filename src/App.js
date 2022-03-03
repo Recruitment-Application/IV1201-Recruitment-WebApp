@@ -28,7 +28,7 @@ const goToApplicationDetails = () => window.location.hash = "applicationDetails"
 function App({userModel, applicationModel}) {
   return (
     <div className="App">
-      <Navigation userModel={userModel}>
+      <Navigation userModel={userModel} applicationModel={applicationModel}>
         <NavigationSignin userModel={userModel}/>
         <NavigationSignup userModel={userModel}/>
         <NavigationSignout userModel={userModel} goToHomePageHref={goToHomePageHref} goToUserProfileHref={userViewPageHref} />

@@ -46,7 +46,7 @@ const ChosenApplicationDetailsView = ({applicationData, decisionList, setDecisio
               <InputGroup.Append className=" btnSize ">
                 <Form.Label className="p-2"><strong>Decision: </strong></Form.Label>
                 <Form.Control className="" size="md" as="select" onChange={(e) => setDecision(e.target.value)} required>
-                  <option value="Competence" hidden> choose your decision </option>
+                  <option value="default" hidden>{applicationData.decision}</option>
                   {decisionList.map((decision, i) => (
                     <option key={i} value={decision} >{decision}</option>
                   ))}
