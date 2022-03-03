@@ -2,7 +2,7 @@ import { Button, Card, Form, InputGroup, Col, Row } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-const RecruiterFilterView = ({ setName, competenceTypesList, chosenCompetence, fromDate, setFromDate, toDate, setToDate, handleAppliedFilter, signedIn }) => (
+const RecruiterFilterView = ({ setName, competenceTypesList, chosenCompetence, fromDate, setFromDate, toDate, setToDate, handleAppliedFilter }) => (
   <Card className="p-2 ">
     <Form className="filter d-flex justify-content-center">
       <Row>

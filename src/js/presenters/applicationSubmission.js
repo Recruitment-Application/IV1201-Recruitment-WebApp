@@ -1,8 +1,7 @@
 import React from "react";
 import useModelProp from "../useModelProp";
-import usePromise from "../usePromise";
-import promiseNoData from "../views/promiseNoData";
 import ApplicationSubmissionView from "../views/applicationSubmissionView";
+import { toast } from 'react-toastify';
 
 function ApplicationSubmission({ userModel, applicationModel, navToHome }) {
 
@@ -10,18 +9,17 @@ function ApplicationSubmission({ userModel, applicationModel, navToHome }) {
   const [fromDate, setFromDate] = React.useState("");
   const [toDate, setToDate] = React.useState("");
   const [competenceType, setCompetenceType] = React.useState("");
-  const [yearOfExperience, setYearsOfExperience] = React.useState("");
-  const [promise, setPromise] = React.useState(null);
-  const [data, error] = usePromise(promise);
+  const [yearsOfExperience, setYearsOfExperience] = React.useState("");
 
-  
   const signedIn = true;
-  const [SubmitApplication, setaddApplicationToList] = React.useState("Signin to submit the application");
+  const [submitApplication, setaddApplicationToList] = React.useState("Signin to submit the application");
 
-  const competenceTypesList = ["(1) ticket sales", "(2) lotteries", "(3) roller coaster operation"];
+  let competenceTypesList = useModelProp(applicationModel, "competenceList");
+  let job = useModelProp(applicationModel, "job");
+  let applicationID = useModelProp(applicationModel, "latestSubmitedApplicationID");
+
   const experienceYearsList = ["0", "1", "2", "3", "5", "10"];
-  const tempJob ="Amusemenet Park";
-  const applicationAlreadySubmited = false;
+
 
   /**
    * check if the user is signedin, Set the submit button name to "Submit the application".
@@ -34,32 +32,44 @@ function ApplicationSubmission({ userModel, applicationModel, navToHome }) {
     },
     [signedIn]
   );
-  
+
+
+  if(applicationID) {
+    let message = `Your application has been successfully registered with application ID: ${applicationID}`; 
+    toast.success(message, {
+      position: toast.POSITION.TOP_CENTER,
+      autoClose: false,
+      hideProgressBar: true,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: false,
+      progress: undefined,
+      theme: "colored"
+    });
+    applicationModel.emptySubmitedApplicationID();
+  }
+
 
   /**
    * render the applicationSubmissionView with the sent data, and return the action of submitting the application.
    */
   return (
-    promiseNoData(promise, data, error) ||
+    //promiseNoData(promise, data, error) ||
     React.createElement(ApplicationSubmissionView, {
-     job: tempJob,
-      competenceType: competenceType => setCompetenceType(competenceType),
+      job: job,
+      competenceTypesList: competenceTypesList,
+      setCompetenceType: competenceType => setCompetenceType(competenceType),
       experienceYearsList: experienceYearsList,
-      yearOfExperience: yearOfExperience => setYearsOfExperience(yearOfExperience),
-      competenceApplication: "data",
-
-      competenceSubmited: applicationAlreadySubmited,
-
-      isCompetenceAlreadySubmited: applicationAlreadySubmited,
-      // //applicationsList.find((listApplications) => listApplication.id === currentCompetence) !== undefined, 
+      setYearsOfExperience: yearsOfExperience => setYearsOfExperience(yearsOfExperience),
       fromDate: fromDate,
       setFromDate: startDate => setFromDate(startDate),
       toDate: toDate,
-      setToDate: toDate => setToDate(toDate),
-      competenceTypesList: competenceTypesList,
-      SubmitApplicationText: SubmitApplication,
-      SubmitApplicationNav: navToHome,
-      signedIn: signedIn
+      setToDate: endDate => setToDate(endDate),
+      submitApplicationText: submitApplication,
+      submitApplication: () => {
+        applicationModel.filterDateInApplicationSubmissionAndForwardToApiData(competenceType, yearsOfExperience, fromDate, toDate);
+      },
+
     })
   );
 }

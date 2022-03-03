@@ -4,10 +4,7 @@ const NavigationView = ({ component, toggleState, setToggleState, handleClose })
   <Navbar expand="sm" bg="dark" variant="dark">
     <Navbar.Brand onClick={(e) => handleClose()}  href="#home">
       <Row>
-        <Col>
-          <img width="50" height="40" src="android-chrome-192x192.png" alt="website logo" />{" "}
-        </Col>
-        <Col className="pl-0">
+        <Col className="pl-3">
           <p className="font-weight-bold pl-0">RecruitementApp</p>
         </Col>
       </Row>
@@ -16,7 +13,7 @@ const NavigationView = ({ component, toggleState, setToggleState, handleClose })
     <Navbar.Collapse in={toggleState} id="responsive-navbar-nav" onClick={(e) => handleClose()}>
       <Nav className="ml-auto">
         <Nav.Link href="#home" className="navButton pr-3 pl-3" >
-          <HouseFill class="houseFill" /> Home</Nav.Link>
+          <HouseFill className="houseFill" /> Home</Nav.Link>
         {component}
       </Nav>
     </Navbar.Collapse>
