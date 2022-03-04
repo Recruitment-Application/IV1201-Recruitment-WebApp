@@ -3,6 +3,8 @@ import useModelProp from "../useModelProp";
 import RecruiterFilterView from "../views/recruiterFilterView";
 import FilteredApplicationsView from "../views/filteredApplicationsView";
 
+import { toast } from 'react-toastify';
+
 function RecruiterMain({ userModel, applicationModel, navToApplicationDetails }) {
   const [fromDate, setFromDate] = React.useState("");
   const [toDate, setToDate] = React.useState("");
@@ -11,10 +13,29 @@ function RecruiterMain({ userModel, applicationModel, navToApplicationDetails })
 
 
   let competenceType = useModelProp(applicationModel, "competenceList");
-  let modelRoleId = useModelProp(userModel, "role");
-  let filledDataOnceInList = useModelProp(applicationModel, "filledDataOnce");
   let modelApplicationsList = useModelProp(applicationModel, "applicationsList");
   let pageNum = 0;
+
+  let chosenApplicationDetails = useModelProp(applicationModel, "chosenApplicationData");
+  let latestApplicationDecision = useModelProp(applicationModel, "latestApplicationDecision");
+
+     console.log(chosenApplicationDetails);
+    console.log(latestApplicationDecision);
+
+  if(chosenApplicationDetails !== null &&  latestApplicationDecision !== null) {
+    let message = `You have made a new decision "${latestApplicationDecision}"for the application with the id: ${chosenApplicationDetails.applicationID}`; 
+    toast.success(message, {
+      position: toast.POSITION.TOP_CENTER,
+      autoClose: true,
+      hideProgressBar: true,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: false,
+      progress: undefined,
+      theme: "colored"
+    });
+    applicationModel.emptyChosenApplicationData();
+  }
   
   /**
    * The first render for the RecruiterFilterView which allows the recruiter filter the application according to the entered attributes. 

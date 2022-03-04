@@ -56,7 +56,6 @@ function ApplicationSubmission({ userModel, applicationModel, navToHome }) {
    * render the applicationSubmissionView with the sent data, and return the action of submitting the application.
    */
   return (
-    //promiseNoData(promise, data, error) ||
     React.createElement(ApplicationSubmissionView, {
       job: job,
       competenceTypesList: competenceTypesList,
