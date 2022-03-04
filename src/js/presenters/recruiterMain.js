@@ -17,6 +17,7 @@ function RecruiterMain({ applicationModel, navToApplicationDetails }) {
   let chosenApplicationDetails = useModelProp(applicationModel, "chosenApplicationData");
   let latestApplicationDecision = useModelProp(applicationModel, "latestApplicationDecision");
 
+
   if(chosenApplicationDetails !== null &&  latestApplicationDecision !== null) {
     let message = `You have made a new decision "${latestApplicationDecision}"for the application with the id: ${chosenApplicationDetails.applicationID}`; 
     toast.success(message, {
