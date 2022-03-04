@@ -2,9 +2,11 @@ import React from "react";
 import NavigationSigninView from '../views/navigationSigninView'
 
 /**
- * Render the navigationSigninview
- * @param {*} param0 userModel is passed to the presenter
- * @returns the entered data by user
+ * The presenter is responisble to show the signin form.
+ * The form lets the user enter the username and password.
+ * @param {UserModel} userModel userModel that includes user singin data.
+ * @returns {NavigationSigninView} a react element of the NavigationSigninView which lets the user to signin with username and password data.
+ *                                 When the user is signed in successfully, the Navigation presenter will display the the username in the navbar. 
  */
 function NavigationSignin({ userModel }) {
 
@@ -12,11 +14,6 @@ function NavigationSignin({ userModel }) {
     const [password, setPassword] = React.useState(""); // Holds the inputed password
     const [showSignin, setShowSignin] = React.useState(false); // The Signin modal gets rendered depending on this value
 
-
-    /**
-     * render the NavigationSigninView where the username and password are send by the user. 
-     * Calling signinUser function in the userModel to process the signin with the entered credentials.
-     */
     return React.createElement(NavigationSigninView, {
         setUsername: (username) => setUsername(username),
         setPassword: (password) => setPassword(password),

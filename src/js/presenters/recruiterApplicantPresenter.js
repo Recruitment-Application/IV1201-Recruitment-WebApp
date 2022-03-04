@@ -5,7 +5,15 @@ import ApplicationSubmission from "./applicationSubmission";
 import FailedSignInView from "../views/failedSignInView";
 import RolesEnum from "../rolesEnum";
 
-function RecruiterApplicantPresenter({ userModel, applicationModel, navToApplicationDetails, goToHome }) {
+/**
+ * The presenter chooses whether the Recruiter or Application presenter will be presented depending on the signed user.
+ * @param {UserModel} userModel an object includes data about the signed in user, if the user is either recruiter or applicant. 
+ * @param {Object} applicationModel an object includes data that checks if the competenceTypeList has been filled once or not (to prevent be filled multiple times).
+ * The model is passed later to the RecruiterMain and ApplicationSubmission presenters.
+ * @param {Function} navToApplicationDetails take the user back to Application Details page
+ * @returns {RecruiterMain | ApplicationSubmission | FailedSignInView} The presenter RecruiterMain if the 
+ */
+function RecruiterApplicantPresenter({ userModel, applicationModel, navToApplicationDetails }) {
   const modelRoleId = useModelProp(userModel, "role");
   let filledDataOnceInList = useModelProp(applicationModel, "filledDataOnce");
   
@@ -17,22 +25,16 @@ function RecruiterApplicantPresenter({ userModel, applicationModel, navToApplica
     },
     [modelRoleId]
   );
-  /**
-   * if the applicant or recruiter is signed in, 
-   * The function will render the signout child component when a user is logged in
-   */
+
   if(modelRoleId === RolesEnum.Recruiter) {
-   return <RecruiterMain userModel={userModel} applicationModel={applicationModel} navToApplicationDetails={navToApplicationDetails}/>
+   return <RecruiterMain applicationModel={applicationModel} navToApplicationDetails={navToApplicationDetails}/>
   }
   else if(modelRoleId === RolesEnum.Applicant) {
-   return <ApplicationSubmission userModel = {userModel} applicationModel = {applicationModel} navToHome = {goToHome}/>
+   return <ApplicationSubmission applicationModel = {applicationModel}/>
   }
-  //This can be kept or replaced with a toastify informing user to signin first.
   else {
     return React.createElement(FailedSignInView, {});
   }
-
 }
-
 
 export default RecruiterApplicantPresenter;

@@ -41,7 +41,7 @@ function App({userModel, applicationModel}) {
 
       <ShowView hash="#userView">
         <div>
-         <RecruiterApplicantPresenter userModel={userModel} applicationModel={applicationModel} navToApplicationDetails ={goToApplicationDetails} goToHome= {null} />
+         <RecruiterApplicantPresenter userModel={userModel} applicationModel={applicationModel} navToApplicationDetails ={goToApplicationDetails}/>
         </div>
       </ShowView>
 

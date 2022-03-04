@@ -18,8 +18,9 @@ const RecruiterFilterView = ({ setName, competenceTypesList, chosenCompetence, f
               <Form.Group controlId="formBasicCompetence" className=" p-2">
                 <Form.Label>Competence:</Form.Label>
                 <Form.Control size="md" as="select" onChange={(e) => chosenCompetence(e.target.value)}>
-                  {Object.keys(competenceTypesList).map((competenceId) => (
-                      <option key={competenceId} value={competenceTypesList[competenceId].competenceId}>{competenceTypesList[competenceId].competenceType}</option>
+                <option value="0"> Any competence </option>
+                  {competenceTypesList.map(competence => (
+                      <option key={competence.competenceId} value={competence.competenceId}>{competence.competenceType}</option>
                   ))}
                 </Form.Control>
               </Form.Group>

@@ -3,17 +3,18 @@ import useModelProp from "../useModelProp";
 import NavigationSignoutView from '../views/navigationSignoutView'
 
 /**
- * Render the Navigation SignoutView
- * @param {*} param0 userModel which contains the necessary data
- * @returns return the clicked homePage or userprofile reference 
- */
+ * The presenter is responisble to display the username and signout button.
+ * The username will take the user to userProfile, and the signout will signout the user from the homepage.
+ * @param {UserModel} userModel userModel that includes signed in user data.
+ * @param {Function} goToHomePageHref navigation to the homepage reference.
+ * @param {Function} goToUserProfileHref navigation to the userProfile referenec.
+ * @returns {NavigationSignoutView} A react element of the NavigationSignoutView which lets the user to signout and handle the signout operation.
+ *  
+ * */
 function NavigationSignout({ userModel, goToHomePageHref, goToUserProfileHref }) {
 
     const modelUsername = useModelProp(userModel, "username");
 
-    /**
-     * render the NavigationSignoutView and call the function signoutUser in the userModel to process the signout.
-     */
     return React.createElement(NavigationSignoutView, {
         username: modelUsername,
         handleSignout: () => userModel.signoutUser(),
