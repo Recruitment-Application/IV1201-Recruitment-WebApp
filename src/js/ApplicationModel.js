@@ -310,6 +310,11 @@ class ApplicationModel {
         this.notifyObservers();
     }
 
+    emptyChosenApplicationData() {
+        this.chosenApplicationData = null;
+        this.latestApplicationDecision = null;
+        this.notifyObservers();
+    }
     /**
    * Reset the info about the error that was recently encountered and notify the observers.
    */

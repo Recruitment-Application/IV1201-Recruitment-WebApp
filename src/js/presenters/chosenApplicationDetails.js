@@ -4,6 +4,7 @@ import ChosenApplicationDetailsView from "../views/chosenApplicationDetailsView"
 import RolesEnum from "../rolesEnum";
 import NoApplicantAccessView from "../views/noApplicantAccess";
 import FailedSignInView from "../views/failedSignInView";
+import { toast } from 'react-toastify';
 
 function ChosenApplicationDetails({ userModel, applicationModel, navToApplicationsList }) {
 
@@ -18,7 +19,6 @@ function ChosenApplicationDetails({ userModel, applicationModel, navToApplicatio
   let modelRoleId = useModelProp(userModel, "role");
 
   if (modelRoleId === RolesEnum.Recruiter) {
-
     /**
      * send the required data to render the ChosenApplicationDetailsView and return an action for the made decision by the recruiter.
      */
