@@ -5,7 +5,14 @@ import ApplicationSubmission from "./applicationSubmission";
 import FailedSignInView from "../views/failedSignInView";
 import RolesEnum from "../rolesEnum";
 
-function RecruiterApplicantPresenter({ userModel, applicationModel, navToApplicationDetails, goToHome }) {
+/**
+ * 
+ * @param {UserModel} userModel
+ * @param {ApplicationModel} applicationModel 
+ * @param {Function} navToApplicationDetails 
+ * @returns {RecruiterMain | ApplicationSubmission | FailedSignInView}
+ */
+function RecruiterApplicantPresenter({ userModel, applicationModel, navToApplicationDetails }) {
   const modelRoleId = useModelProp(userModel, "role");
   let filledDataOnceInList = useModelProp(applicationModel, "filledDataOnce");
   
@@ -22,10 +29,10 @@ function RecruiterApplicantPresenter({ userModel, applicationModel, navToApplica
    * The function will render the signout child component when a user is logged in
    */
   if(modelRoleId === RolesEnum.Recruiter) {
-   return <RecruiterMain userModel={userModel} applicationModel={applicationModel} navToApplicationDetails={navToApplicationDetails}/>
+   return <RecruiterMain applicationModel={applicationModel} navToApplicationDetails={navToApplicationDetails}/>
   }
   else if(modelRoleId === RolesEnum.Applicant) {
-   return <ApplicationSubmission userModel = {userModel} applicationModel = {applicationModel} navToHome = {goToHome}/>
+   return <ApplicationSubmission applicationModel = {applicationModel}/>
   }
   //This can be kept or replaced with a toastify informing user to signin first.
   else {

@@ -5,22 +5,17 @@ import FilteredApplicationsView from "../views/filteredApplicationsView";
 
 import { toast } from 'react-toastify';
 
-function RecruiterMain({ userModel, applicationModel, navToApplicationDetails }) {
+function RecruiterMain({ applicationModel, navToApplicationDetails }) {
   const [fromDate, setFromDate] = React.useState("");
   const [toDate, setToDate] = React.useState("");
   const [name, setName] = React.useState("");
   const [chosenCompetence, setChosenCompetence] = React.useState("");
 
-
   let competenceType = useModelProp(applicationModel, "competenceList");
   let modelApplicationsList = useModelProp(applicationModel, "applicationsList");
   let pageNum = 0;
-
   let chosenApplicationDetails = useModelProp(applicationModel, "chosenApplicationData");
   let latestApplicationDecision = useModelProp(applicationModel, "latestApplicationDecision");
-
-     console.log(chosenApplicationDetails);
-    console.log(latestApplicationDecision);
 
   if(chosenApplicationDetails !== null &&  latestApplicationDecision !== null) {
     let message = `You have made a new decision "${latestApplicationDecision}"for the application with the id: ${chosenApplicationDetails.applicationID}`; 

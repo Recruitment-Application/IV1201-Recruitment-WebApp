@@ -2,24 +2,22 @@ import React from "react";
 import NavigationSignupView from '../views/navigationSignupView'
 
 /**
- * Render the Navigation SignupView
- * @param {*} param0 userModel which contains necessary data
- * @returns returns the entered Signup Data by user
+ * The presenter is responsible to signup new users and signin them to the webapp after the successful registration. 
+ * @param {UserModel} userModel userModel which the function that register the new user.
+ * @returns {NavigationSignupView} NavigationSignupView that contains a signup form that holds the entered data using different react stated 
+ *                                 and being updated when the user enters new data. 
+ *                                 By pressing the Signup button, the entered data will be passed to a function in the userModel to register the new user to the database.
  */
-function NavigationSignup({ userModel }) { // userModel will be passed as param here
-
+function NavigationSignup({ userModel }) {
 
     const [firstName, setFirstName] = React.useState("");
     const [lastName, setLastName] = React.useState("");
     const [personNumber, setPeronNumber] = React.useState("");
-    const [email, setEmail] = React.useState(""); // Holds the inputed email
+    const [email, setEmail] = React.useState("");
     const [username, setUsername] = React.useState("");
-    const [password, setPassword] = React.useState(""); // Holds the inputed password
-    const [showSignup, setShowSignup] = React.useState(false); // The Signup modal gets rendered depending on this value
+    const [password, setPassword] = React.useState("");
+    const [showSignup, setShowSignup] = React.useState(false);
 
-    /**
-     * render the NavigationSignupView and pass the entered data by the user to the signupUser(). 
-     */
     return React.createElement(NavigationSignupView, {
         setFirstName: (firstName) => setFirstName(firstName),
         setLastName: (lastName) => setLastName(lastName),

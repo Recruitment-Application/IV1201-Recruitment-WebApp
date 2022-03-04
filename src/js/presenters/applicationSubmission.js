@@ -1,39 +1,33 @@
 import React from "react";
 import useModelProp from "../useModelProp";
 import ApplicationSubmissionView from "../views/applicationSubmissionView";
-import RolesEnum from "../rolesEnum";
 import { toast } from 'react-toastify';
 
-function ApplicationSubmission({ userModel, applicationModel, navToHome }) {
+/**
+ * The presenter of the View (applicationSubmissionView) which render the form of the application and 
+ * lets the applicant submit a new application with new data.
+ * The function shows a toast with the applicaitonID(notification) to the user when the applications is successfuly registered in the database.
+ * The function accessed only when the signedin user is an applicant.
+ * 
+ * @param {Object} applicationModel from the "RecruiterApplicantPresenter" 
+ * which includes data about the filtered applicaitons and other data for other presenters.
+ * 
+ * @returns {ApplicationSubmissionView} A React element helps the user to enter the data of the submitted application.
+ */
+function ApplicationSubmission({ applicationModel }) {
 
   const [fromDate, setFromDate] = React.useState("");
   const [toDate, setToDate] = React.useState("");
   const [competenceType, setCompetenceType] = React.useState("");
   const [yearsOfExperience, setYearsOfExperience] = React.useState("");
 
-  //const signedIn = true;
-  const [submitApplication, setaddApplicationToList] = React.useState("Signin to submit the application");
-
+  let submitApplication = "Submit the application";
   let competenceTypesList = useModelProp(applicationModel, "competenceList");
   let job = useModelProp(applicationModel, "job");
   let applicationID = useModelProp(applicationModel, "latestSubmittedApplicationID");
-  let modelRoleId = useModelProp(userModel, "role");
 
 
   const experienceYearsList = ["0", "1", "2", "3", "5", "10"];
-
-
-  /**
-   * check if the user is signedin, Set the submit button name to "Submit the application".
-   */
-  React.useEffect(
-    function () {
-      if (modelRoleId === RolesEnum.Applicant) {
-        setaddApplicationToList("Submit the application");
-      }
-    },
-    [modelRoleId]
-  );
 
 
   if(applicationID) {
@@ -51,10 +45,6 @@ function ApplicationSubmission({ userModel, applicationModel, navToHome }) {
     applicationModel.emptySubmittedApplicationID();
   }
 
-
-  /**
-   * render the applicationSubmissionView with the sent data, and return the action of submitting the application.
-   */
   return (
     React.createElement(ApplicationSubmissionView, {
       job: job,
