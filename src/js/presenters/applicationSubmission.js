@@ -20,15 +20,12 @@ function ApplicationSubmission({ applicationModel }) {
   const [toDate, setToDate] = React.useState("");
   const [competenceType, setCompetenceType] = React.useState("");
   const [yearsOfExperience, setYearsOfExperience] = React.useState("");
+  const experienceYearsList = ["0", "1", "2", "3", "5", "10"];
 
   let submitApplication = "Submit the application";
   let competenceTypesList = useModelProp(applicationModel, "competenceList");
   let job = useModelProp(applicationModel, "job");
   let applicationID = useModelProp(applicationModel, "latestSubmittedApplicationID");
-
-
-  const experienceYearsList = ["0", "1", "2", "3", "5", "10"];
-
 
   if(applicationID) {
     let message = `Your application has been successfully registered with application ID: ${applicationID}`; 

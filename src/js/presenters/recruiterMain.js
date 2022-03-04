@@ -5,6 +5,19 @@ import FilteredApplicationsView from "../views/filteredApplicationsView";
 
 import { toast } from 'react-toastify';
 
+/**
+ * The RecruiterMain is responsible for the filter bar where the recruiter chooses which attribute will be used for the applications filtering.
+ * According to the chosen attribute, the FilteredApplicationsView view will list the applications.
+ * When the recruiter chooses an application, and makes a decision for that application, a notification will be shown to the recruiter to verify 
+ * the made decision with the application id as a notification. 
+ * @param {ApplicationModel} applicationModel contains data about the competenceType list, the filtered application using the chosen attributes, 
+ *                                            the chosen application details to be used for the notification and the made decision of the chosen application.
+ * @param {Function} navToApplicationDetails  Takes the recruiter to the applicationDetails view when an application is chosen to be displayed.
+ * @returns {RecruiterFilterView & FilteredApplicationsView} RecruiterFilterView to let the user to enter the desired attributes data to filter 
+ *                                                           the applications depending on. 
+ *                                                           FilteredApplicationsView will be displayed when the "Filter application" button is pressed. 
+ *                                                           It displays the filtered applications.
+ */
 function RecruiterMain({ applicationModel, navToApplicationDetails }) {
   const [fromDate, setFromDate] = React.useState("");
   const [toDate, setToDate] = React.useState("");
@@ -33,10 +46,6 @@ function RecruiterMain({ applicationModel, navToApplicationDetails }) {
     applicationModel.emptyChosenApplicationData();
   }
   
-  /**
-   * The first render for the RecruiterFilterView which allows the recruiter filter the application according to the entered attributes. 
-   * The second render is for FilteredApplicationsView which display the filtered applications.
-   */
   return React.createElement(
     React.Fragment,
     {},
