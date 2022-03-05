@@ -2,7 +2,7 @@ import React from "react";
 import NavigationSignupView from '../views/navigationSignupView'
 
 /**
- * The presenter is responsible to signup new users and signin them to the webapp after the successful registration. 
+ * The presenter is responsible to signup new users and sign in them to the webapp after the successful registration. 
  * @param {UserModel} userModel userModel which the function that register the new user.
  * @returns {NavigationSignupView} NavigationSignupView that contains a signup form that holds the entered data using different react stated 
  *                                 and being updated when the user enters new data. 
@@ -25,7 +25,7 @@ function NavigationSignup({ userModel }) {
         setEmail: (email) => setEmail(email),
         setUsername: (username) => setUsername(username),
         setPassword: (password) => setPassword(password),
-        handleSignup: () => userModel.signupUser(firstName, lastName, personNumber, email, username, password) , // will be uncommented when the usermodel is finished.
+        handleSignup: () => userModel.signupUser(firstName, lastName, personNumber, email, username, password),
         show: showSignup,
         handleShow: () => setShowSignup(true),
         handleClose: () => setShowSignup(false)

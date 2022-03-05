@@ -6,11 +6,11 @@ import { toast } from 'react-toastify';
 /**
  * The presenter of the View (applicationSubmissionView) which render the form of the application and 
  * lets the applicant submit a new application with new data.
- * The function shows a toast with the applicaitonID(notification) to the user when the applications is successfuly registered in the database.
- * The function accessed only when the signedin user is an applicant.
+ * The function shows a toast with the application ID(notification) to the user when the applications is successfully registered in the database.
+ * The function accessed only when the signed in user is an applicant.
  * 
  * @param {Object} applicationModel from the "RecruiterApplicantPresenter" 
- * which includes data about the filtered applicaitons and other data for other presenters.
+ * which includes data about the filtered applications and other data for other presenters.
  * 
  * @returns {ApplicationSubmissionView} A React element helps the user to enter the data of the submitted application.
  */

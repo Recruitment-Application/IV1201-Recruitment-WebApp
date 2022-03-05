@@ -14,7 +14,7 @@ import RolesEnum from "../rolesEnum";
  * @returns {RecruiterMain | ApplicationSubmission | FailedSignInView} The presenter RecruiterMain if the signed in user is a recruiter.
  *                                                                     The ApplicationSubmission if the signed in user is an applicant.
  *                                                                     A react element of the FailedSignInView that let the visitor to know 
- *                                                                     the page needs a signin first. 
+ *                                                                     the page needs a sign in first. 
  */
 
 function RecruiterApplicantPresenter({ userModel, applicationModel, navToApplicationDetails }) {
