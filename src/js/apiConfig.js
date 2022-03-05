@@ -1,10 +1,9 @@
 
 // The host the server is listening on
-const localhost = 'localhost';
-const SERVER_HOST=localhost
+const SERVER_HOST = localhost
 
 // The port number the server is listening on
-const SERVER_PORT=3030
+const SERVER_PORT = 3030
 
 // The base url for all api calls
 const BASE_URL = 'http://' + SERVER_HOST + ':' + SERVER_PORT + '/';

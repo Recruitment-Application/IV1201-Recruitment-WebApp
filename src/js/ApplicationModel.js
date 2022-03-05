@@ -1,7 +1,12 @@
-
 import ApiData from "./apiData";
 
+/**
+ * Responsible for handling all the information about the applications.
+ */
 class ApplicationModel {
+    /**
+     * Create an instance of the application handler.
+     */
     constructor() {
         this.subscribers = [];
         this.competenceList = [];
@@ -20,7 +25,9 @@ class ApplicationModel {
         this.latestApplicationDecision = null;
     }
 
-    // Performs login to existing account and fills the userModel with the user data.
+    /**
+     * Get the jobs and their info and store them into an attribute.
+     */
     getJobs() {
         ApiData.getJobs()
             .then((result) => {
@@ -38,14 +45,21 @@ class ApplicationModel {
                     this.handleErrorMessages(503, 'Something went wrong in the website or the service.');
                 }
             });
-
     }
 
-    // 
-    getCompetenceList() {
-        return this.competenceList; // will this be called and list the jobs as well, or just the competenceList for one job ?
-    }
-
+    /**
+     * Get all the application that follow the filtering parameters. The user must be a recruiter.
+     * @param {string} name The name of the applicant that the application relates to.
+     *                      Leaving it empty means no filtering with name.
+     * @param {number} competenceId The competence that is related to the application filtering.
+     *                              Leaving it with 0 value means no filtering with competence.
+     * @param {string} dateFrom The start date that the user is available.
+     *                          Leaving it empty means no filtering with dateFrom.
+     * @param {string} dateTo The end date that the user is available.
+     *                        Leaving it empty means no filtering with dateTo.
+     * @param {number} pageNum The page that the list is needed to get.
+     *                          Leaving it with 0 value means all the applications.
+     */
     filterApplications(name, competenceId, dateFrom, dateTo, pageNum) {
         ApiData.listApplications(name, competenceId, dateFrom, dateTo, pageNum)
             .then((result) => {
@@ -56,9 +70,9 @@ class ApplicationModel {
                     });
                 } else {
                     result.json().then((data) => {
-                      this.handleErrorMessages(result.status, data.error);
+                        this.handleErrorMessages(result.status, data.error);
                     });
-                  }
+                }
             })
             .catch((error) => {
                 if (error instanceof TypeError) {
@@ -70,7 +84,10 @@ class ApplicationModel {
 
     }
 
-
+    /**
+     * Get all the information related to the specified application.
+     * @param {number} applicationId The id related to the application.
+     */
     getChosenApplicationData(applicationId) {
         ApiData.getApplicationDetails(applicationId)
             .then((result) => {
@@ -81,9 +98,9 @@ class ApplicationModel {
                     });
                 } else {
                     result.json().then((data) => {
-                      this.handleErrorMessages(result.status, data.error);
+                        this.handleErrorMessages(result.status, data.error);
                     });
-                  }
+                }
             })
             .catch((error) => {
                 if (error instanceof TypeError) {
@@ -95,6 +112,11 @@ class ApplicationModel {
 
     }
 
+    /**
+     * Submit the decision taken about an application. The user must be a recruiter.
+     * @param {number} applicationId The id of the application that the decision is related to.
+     * @param {string} decision The decision taken about the application.
+     */
     updateApplicationDecision(applicationId, decision) {
         ApiData.submitApplicationDecision(applicationId, decision)
             .then((result) => {
@@ -105,9 +127,9 @@ class ApplicationModel {
                     });
                 } else {
                     result.json().then((data) => {
-                      this.handleErrorMessages(result.status, data.error);
+                        this.handleErrorMessages(result.status, data.error);
                     });
-                  }
+                }
             })
             .catch((error) => {
                 if (error instanceof TypeError) {
@@ -119,18 +141,26 @@ class ApplicationModel {
 
     }
 
-    filterUnFilteredApplicationsData(unfilteredName, unfilteredCompetenceId, unfilterdDateFrom, unfilterdDateTo, unfilteredPageNum) {
+    /**
+     * Filter out the info of the passed data to match a specific format for listing out the applications.
+     * @param {string} unfilteredName The unfiltered name that could be empty.
+     * @param {number} unfilteredCompetenceId The id of the competence that could be empty.
+     * @param {string} unfilteredDateFrom The start date of the user availability that could be empty.
+     * @param {string} unfilteredDateTo The end date of the user availability that could be empty.
+     * @param {number} unfilteredPageNum The page number that could be empty.
+     */
+    filterUnFilteredApplicationsData(unfilteredName, unfilteredCompetenceId, unfilteredDateFrom, unfilteredDateTo, unfilteredPageNum) {
         let dateFrom = "";
         let dateTo = "";
         let name = "";
         let competenceId = 0;
-        if (unfilterdDateFrom !== "" && unfilterdDateFrom !== undefined && unfilterdDateFrom !== null) {
+        if (unfilteredDateFrom !== "" && unfilteredDateFrom !== undefined && unfilteredDateFrom !== null) {
             const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
-            dateFrom = unfilterdDateFrom.toLocaleDateString('sv-SE', options);
+            dateFrom = unfilteredDateFrom.toLocaleDateString('sv-SE', options);
         }
-        if (unfilterdDateTo !== "" && unfilterdDateTo !== undefined && unfilterdDateTo !== null) {
+        if (unfilteredDateTo !== "" && unfilteredDateTo !== undefined && unfilteredDateTo !== null) {
             const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
-            dateTo = unfilterdDateTo.toLocaleDateString('sv-SE', options);
+            dateTo = unfilteredDateTo.toLocaleDateString('sv-SE', options);
         }
         if (unfilteredName !== "") {
             name = unfilteredName;
@@ -138,14 +168,17 @@ class ApplicationModel {
         if (unfilteredCompetenceId !== "") {
             competenceId = unfilteredCompetenceId;
         }
-        //unfilteredPageNum should be handled (can be 0, 1, 2, etc.) from user/default
-
 
         this.filterApplications(name, competenceId, dateFrom, dateTo, unfilteredPageNum);
-
     }
 
-
+    /**
+     * Create an application for the user for the job.
+     * @param {number} competenceId The competence id that is related to the job.
+     * @param {number} yearsOfExperience The amount of experience that the user has in the job.
+     * @param {string} dateFrom The start date of the user availability.
+     * @param {string} dateTo The end date of the user availability.
+     */
     submitApplication(competenceId, yearsOfExperience, dateFrom, dateTo) {
         ApiData.submitApplication(competenceId, yearsOfExperience, dateFrom, dateTo)
             .then((result) => {
@@ -156,9 +189,9 @@ class ApplicationModel {
                     });
                 } else {
                     result.json().then((data) => {
-                      this.handleErrorMessages(result.status, data.error);
+                        this.handleErrorMessages(result.status, data.error);
                     });
-                  }
+                }
             })
             .catch((error) => {
                 if (error instanceof TypeError) {
@@ -170,19 +203,25 @@ class ApplicationModel {
 
     }
 
-
-    filterSubmittedApplicationData(unfilteredCompetenceID, unfilteredYearsOfExperience, unfilterdDateFrom, unfilterdDateTo) {
+    /**
+     * Filter out the info about the submission of the application parameters. The user must be an applicant.
+     * @param {number} unfilteredCompetenceID The unfiltered name that could be empty.
+     * @param {number} unfilteredYearsOfExperience The id of the competence that could be empty.
+     * @param {string} unfilteredDateFrom The start date of the user availability that could be empty.
+     * @param {string} unfilteredDateTo The end date of the user availability that could be empty.
+     */
+    filterSubmittedApplicationData(unfilteredCompetenceID, unfilteredYearsOfExperience, unfilteredDateFrom, unfilteredDateTo) {
         let dateFrom = "";
         let dateTo = "";
         let competenceId = 0;
         let yearsOfExperience = 0;
-        if (unfilterdDateFrom !== "" && unfilterdDateFrom !== undefined) {
+        if (unfilteredDateFrom !== "" && unfilteredDateFrom !== undefined) {
             const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
-            dateFrom = unfilterdDateFrom.toLocaleDateString('sv-SE', options);
+            dateFrom = unfilteredDateFrom.toLocaleDateString('sv-SE', options);
         }
-        if (unfilterdDateTo !== "" && unfilterdDateTo !== undefined) {
+        if (unfilteredDateTo !== "" && unfilteredDateTo !== undefined) {
             const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
-            dateTo = unfilterdDateTo.toLocaleDateString('sv-SE', options);
+            dateTo = unfilteredDateTo.toLocaleDateString('sv-SE', options);
         }
         if (unfilteredCompetenceID !== "") {
             competenceId = parseInt(unfilteredCompetenceID);
@@ -190,33 +229,35 @@ class ApplicationModel {
         if (unfilteredYearsOfExperience !== "") {
             yearsOfExperience = parseInt(unfilteredYearsOfExperience);
         }
-        //unfilteredPageNum should be handled (can be 0, 1, 2, etc.) from user/default
 
         this.submitApplication(competenceId, yearsOfExperience, dateFrom, dateTo);
-
     }
 
+    /**
+     * Get the competences that are related jobs.
+     * @returns {[{id, type}]} Array with the competences related to the job. 
+     */
+    getCompetenceList() {
+        return this.competenceList;
+    }
 
     /**
-   * Notify the observers for the error encountered during some operation and pass on the error information.
-   * @param {number} code The status code related to the error.
-   * @param {string} message The message explanting the error.
-   */
+     * Notify the observers for the error encountered during some operation and pass on the error information.
+     * @param {number} code The status code related to the error.
+     * @param {string} message The message explanting the error.
+     */
     reportError(code, message) {
         this.errorData = { code: code, message: message };
         this.notifyObservers();
     }
 
     /**
-     * fill the userData with the passed data of loggedIn, username and role.
-     * @param {*} param0 
+     * Set the job information with all their data.
+     * @param {[jobID, description, {id, type}]} dataContent The content related to the jobs. 
      */
     populateJobData(dataContent) {
         if (!this.filledDataOnce) {
-
-
             for (let i = 0; i < dataContent.length; i++) {
-
                 for (let j = 0; j < dataContent[i].competences.length; j++) {
                     let competence = {
                         competenceId: dataContent[i].competences[j].id,
@@ -238,13 +279,22 @@ class ApplicationModel {
         this.notifyObservers();
     }
 
+    /**
+     * Set all the applications that are filtered.
+     * @param {{applicationID, firstName, lastName, competenceType, yearsOfExperience, dateFrom, 
+     *          dateTo, decision}} filteredApplications The applications that are filtered.
+     */
     populateApplicationsData(filteredApplications) {
         let applications = filteredApplications.applications;
         this.applicationsList = applications;
-
         this.notifyObservers();
     }
 
+    /**
+     * Set the application details with all the needed information.
+     * @param {{applicationID, firstName, lastName, competenceType, yearsOfExperience, dateFrom, 
+     *          dateTo, decision}} applicationDetails The application details.
+     */
     populateChosenApplicationData(applicationDetails) {
         let chosenApplicationData = {
             applicationID: applicationDetails.applicationID,
@@ -255,98 +305,117 @@ class ApplicationModel {
             dateFrom: applicationDetails.dateFrom,
             dateTo: applicationDetails.dateTo,
             decision: applicationDetails.decision,
-
         }
 
         this.chosenApplicationData = chosenApplicationData;
         this.notifyObservers();
     }
 
+    /**
+     * Get the application details with all the needed information.
+     * @return {{applicationID, firstName, lastName, competenceType, yearsOfExperience, dateFrom, 
+     *          dateTo, decision}} the application details.
+     */
     returnChosenApplicationDetails() {
         return this.chosenApplicationData;
     }
 
+    /**
+     * Set the id for the submitted application.
+     * @param {{id}} dataContent The data with an id content.
+     */
     populateSubmittedApplicationData(dataContent) {
         this.latestSubmittedApplicationID = dataContent.applicationID;
         this.notifyObservers();
     }
 
+    /**
+     * Get the id for the submitted application.
+     * @returns {number} The id for the submitted application.
+     */
     getSubmittedApplicationID() {
         return this.latestSubmittedApplicationID;
     }
 
+    /**
+     * Get the applications that were filtered.
+     * @returns {[{firstName, lastName}]} An array of applications.
+     */
     getApplicationsList() {
         return this.applicationsList;
     }
 
-
+    /**
+     * Set the id value of the current application.
+     * @param {number} applicationID The id of the application.
+     */
     setCurrentApplicationID(applicationID) {
         this.currentApplicationID = applicationID;
         this.notifyObservers();
     }
 
+    /**
+     * Get the last id for the application which is the most recent.
+     * @returns {number} The id of the most recent application.
+     */
     getCurrentApplicationID() {
         return this.currentApplicationID;
     }
 
+    /**
+     * Set the taken decision for last application.
+     * @param {{decision}} dataContent The decision content.
+     */
     populateTakenDecisionData(dataContent) {
         this.latestApplicationDecision = dataContent.decision;
         this.notifyObservers();
     }
 
     /**
-     * empties the userModelData and set its values to null, then notify the observers.
+     * Reset the info about the last registered application.
      */
-    // emptyUserModelData() {
-    //     this.loggedIn = null;
-    //     this.username = null;
-    //     this.role = null;
-    //     this.errorData = null;
-    //     this.notifyObservers();
-    // }
-
     emptySubmittedApplicationID() {
         this.latestSubmittedApplicationID = null;
         this.notifyObservers();
     }
 
+    /**
+     * Reset the info about the application to display.
+     */
     emptyChosenApplicationData() {
         this.chosenApplicationData = null;
         this.latestApplicationDecision = null;
         this.notifyObservers();
     }
+
     /**
-   * Reset the info about the error that was recently encountered and notify the observers.
-   */
+     * Reset the info about the error that was recently encountered and notify the observers.
+     */
     emptyErrorData() {
         this.errorData = null;
         this.notifyObservers();
     }
 
-    // Adds an observer to the userModel.
+    /**
+     * Adds an observer to the class.
+     * @param {function} callback The operation that will be called when the observer is notified.
+     */
     addObserver(callback) {
         this.subscribers = this.subscribers.concat(callback);
     }
 
-    // Removes the observer from the userModel.
+    /**
+     * Removes the observer from the class.
+     * @param {Observer} obs The observer 
+     */
     removeObserver(obs) {
         this.subscribers = this.subscribers.filter(o => { return o !== obs; });
     }
 
     /**
-     * prints the loggedIn status, username and roleID in the browser's console.
+     * Notifies the observers after any changes.
      */
-    //   printModel() {
-    //     console.log(`loggedIn: ${this.loggedIn}`);
-    //     console.log(`username: ${this.username}`);
-    //     console.log(`role: ${this.role}`);
-
-    //   }
-
-
-    // Notifies the obvservers after any changes.
     notifyObservers() {
-        // this.printModel();
         this.subscribers.forEach(callback => {
             try {
                 callback();
