@@ -2,12 +2,11 @@
 import ApiData from "./apiData";
 
 /**
- * the UserModel class calls function in ApiData file that contaisn the apiCalls. 
+ * Responsible for handling all the information about the user credentials.
  */
 class UserModel {
   /**
-   * the constructor of the UserModel that declares the global variables. 
-   * At the end, it calls the checkSignin() to keep the latest eligiable signedin user to the webapp.
+   * Create an instance of the user handler.
    */
   constructor() {
     this.subscribers = [];
@@ -18,7 +17,11 @@ class UserModel {
     this.checkSignin();
   }
 
-  // Performs login to existing account and fills the userModel with the user data.
+  /**
+   * Perform the signin process using the entered username and password by user.
+   * @param {String} username The entered username by user which will be displayed later when the signin is succeeded.
+   * @param {String} password The entered password by user.
+   */
   signinUser(username, password) {
     ApiData.signinUser(username, password)
       .then((result) => {
@@ -45,9 +48,7 @@ class UserModel {
   }
 
   /**
-   * Check if the user is signedin or not. If the user is eligable to be stay signedin, it will return the username and roleID. 
-   * Fill the userModel with the user data.
-   * If the user is signedout, the user's data will be cleared usign emptyUserModelData() and change the status of loggedIn to false.
+   * Check if the visitor hasn't signed in yet, is still signed in on the webapp or has been signed out. 
    */
   checkSignin() {
     ApiData.checkSignin()
@@ -74,8 +75,7 @@ class UserModel {
   }
 
   /**
-   * Signout the user from the webapp page. 
-   * When the signout is successful, the function will empty the userModel data and change the loggedIn status to false.
+   * Sign out the user from the webapp page. 
    */
   signoutUser() {
     ApiData.signoutUser()
@@ -97,38 +97,37 @@ class UserModel {
   }
 
   /**
-   * signupUser function calls the signupUser() in the ApiData and passes the entered data by presenter,
-   * If the result if ok, the userModel data will be filled with the username and roleID, and change the userLoggedIn to true.
-   * @param {*} firstName the entered firstName by user
-   * @param {*} lastName the entered lastName by user
-   * @param {*} personNumber the entered personNumber by user
-   * @param {*} email the entered email by user
-   * @param {*} username the entered username by user
-   * @param {*} password the entered password by user
+   * Process the registration of the new user using the passed credentials.
+   * @param {String} firstName the entered firstName by user in the presented form.
+   * @param {String} lastName the entered lastName by user in the presented form.
+   * @param {String} personNumber the entered personNumber by user in the presented form.
+   * @param {String} email the entered email by user in the presented form.
+   * @param {String} username the entered username by user in the presented form.
+   * @param {String} password the entered password by user in the presented form.
    */
   signupUser(firstName, lastName, personNumber, email, username, password) {
     ApiData.signupUser(firstName, lastName, personNumber, email, username, password)
-    .then((result) => {
-      if (result.ok) {
-        result.json().then((data) => {
-          let userLoggedIn = true;
-          let currentUsername = data.success.username;
-          let currentRole = data.success.roleID;
-          this.populateUserModelData({ loggedIn: userLoggedIn, username: currentUsername, role: currentRole });
-        });
-      } else {
-        result.json().then((data) => {
-          this.handleErrorMessages(result.status, data.error);
-        });
-      }
-    })
-    .catch((error) => {
-      if (error instanceof TypeError) {
-        this.handleErrorMessages(503, 'There is no connection to the server or the server is unavailable.');
-      } else {
-        this.handleErrorMessages(503, 'Something went wrong in the website or the service.');
-      }
-    });
+      .then((result) => {
+        if (result.ok) {
+          result.json().then((data) => {
+            let userLoggedIn = true;
+            let currentUsername = data.success.username;
+            let currentRole = data.success.roleID;
+            this.populateUserModelData({ loggedIn: userLoggedIn, username: currentUsername, role: currentRole });
+          });
+        } else {
+          result.json().then((data) => {
+            this.handleErrorMessages(result.status, data.error);
+          });
+        }
+      })
+      .catch((error) => {
+        if (error instanceof TypeError) {
+          this.handleErrorMessages(503, 'There is no connection to the server or the server is unavailable.');
+        } else {
+          this.handleErrorMessages(503, 'Something went wrong in the website or the service.');
+        }
+      });
   }
 
 
@@ -143,8 +142,10 @@ class UserModel {
   }
 
   /**
-   * fill the userData with the passed data of loggedIn, username and role.
-   * @param {*} param0 
+   * Set the user information with all their data.
+   * @param {{loggedIn}} loggedIn the status of the signed in user
+   * @param {{String}} username the username of the signed in user
+   * @param {{number}} role the role of the signed in user (1: recruiter, 2: applicant)
    */
   populateUserModelData({ loggedIn, username, role }) {
     this.loggedIn = loggedIn;
@@ -154,7 +155,7 @@ class UserModel {
   }
 
   /**
-   * empties the userModelData and set its values to null, then notify the observers.
+   * Reset the info about the signed in user.
    */
   emptyUserModelData() {
     this.loggedIn = null;
@@ -165,36 +166,33 @@ class UserModel {
   }
 
   /**
-   * Reset the info about the error that was recently encountered and notify the observers.
+   * Reset the info about the error that was recently encountered.
    */
   emptyErrorData() {
     this.errorData = null;
     this.notifyObservers();
   }
 
-  // Adds an observer to the userModel.
+  /**
+    * Adds an observer to the class.
+    * @param {function} callback The operation that will be called when the observer is notified.
+    */
   addObserver(callback) {
     this.subscribers = this.subscribers.concat(callback);
   }
 
-  // Removes the observer from the userModel.
+  /**
+   * Removes the observer from the class.
+   * @param {Observer} obs The observer 
+   */
   removeObserver(obs) {
     this.subscribers = this.subscribers.filter(o => { return o !== obs; });
   }
 
   /**
-   * prints the loggedIn status, username and roleID in the browser's console.
+   * Notifies the observers after any changes.
    */
-  printModel() {
-    console.log(`loggedIn: ${this.loggedIn}`);
-    console.log(`username: ${this.username}`);
-    console.log(`role: ${this.role}`);
-
-  }
-
-  // Notifies the obvservers after any changes.
   notifyObservers() {
-    //this.printModel();
     this.subscribers.forEach(callback => {
       try {
         callback();
@@ -206,10 +204,10 @@ class UserModel {
   }
 
   /**
-   * Handle the errors that the website encounters.
-   * @param {number} status The status code related to the error.
-   * @param {string | {msg, param}} error The error that happened.
-   */
+ * Handle the errors that the website encounters.
+ * @param {number} status The status code related to the error.
+ * @param {string | {msg, param}} error The error that happened.
+ */
   handleErrorMessages(status, error) {
     if (typeof error === 'string') {
       this.reportError(status, error);

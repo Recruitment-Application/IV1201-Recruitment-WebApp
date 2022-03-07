@@ -2,10 +2,10 @@ import React from "react";
 import NavigationSigninView from '../views/navigationSigninView'
 
 /**
- * The presenter is responisble to show the signin form.
+ * The presenter is responsible to show the sign in form.
  * The form lets the user enter the username and password.
- * @param {UserModel} userModel userModel that includes user singin data.
- * @returns {NavigationSigninView} a react element of the NavigationSigninView which lets the user to signin with username and password data.
+ * @param {UserModel} userModel userModel that includes user sing in data.
+ * @returns {NavigationSigninView} a react element of the NavigationSigninView which lets the user to sign in with username and password data.
  *                                 When the user is signed in successfully, the Navigation presenter will display the the username in the navbar. 
  */
 function NavigationSignin({ userModel }) {
