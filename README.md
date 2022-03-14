@@ -1,7 +1,8 @@
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-The react webapp is a webapp for the Recruitment-WebApp API under the same Organisation.
+
+The react webapp is for the Recruitment-WebApp under the same Organisation.
 
 ## Used tools
 
