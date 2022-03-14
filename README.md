@@ -1,6 +1,17 @@
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The react webapp is a webapp for the Recruitment-WebApp API under the same Organisation.
+
+## Used tools
+
+For the project development, the following tools have been used:
+- Version control (Git)
+- JavaScript runtime environment (Node.js)
+- Project and package management (npm)
+- Automatic update when files change (React-scripts)
+- Code editor (Visual Studio Code)
+
 
 ## Available Scripts
 
