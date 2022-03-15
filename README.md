@@ -14,6 +14,19 @@ For the project development, the following tools have been used:
 - Code editor (Visual Studio Code)
 
 
+## Frameworks
+
+The frameworks were used in the project:
+- bootstrap
+- react
+- react-bootstrap
+- react-bootstrap-icons
+- react-datepicker
+- react-dom
+- react-scripts
+- react-toastify
+- web-vitals
+
 ## Available Scripts
 
 In the project directory, you can run:
